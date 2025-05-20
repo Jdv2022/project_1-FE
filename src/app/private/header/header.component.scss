@@ -1,0 +1,33 @@
+:host {
+  background: var(--vex-toolbar-background);
+  box-sizing: border-box;
+  display: block;
+  white-space: nowrap;
+  width: 100%;
+  z-index: var(--vex-toolbar-z-index);
+  @apply backdrop-blur border-b;
+}
+
+.toolbar {
+  height: var(--vex-toolbar-height);
+}
+
+a {
+  text-decoration: none;
+}
+
+.active-link {
+	border-left-color: #3b82f6;
+	font-weight: 600;
+	color: #1d4ed8;
+	border-bottom: 1px solid #1d4ed8;
+}
+
+::ng-deep .mat-mdc-tab-link-container {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+::ng-deep .mat-mdc-tab-links {
+	height: 24px;
+}

@@ -1,0 +1,89 @@
+<div class="w-full h-full bg-pattern flex flex-col items-center justify-center">
+	<mat-card *ngIf="loading" >
+		<mat-card-header class="border border-b-1 border-primary mb-4 p-4">
+			<mat-card-title>
+			Establishing Connection
+			</mat-card-title>
+		</mat-card-header>
+		<mat-card-content>
+			<div class="flex items-center justify-center">
+				<p class="flex items-center gap-2">
+					<mat-progress-spinner
+						mode="indeterminate"
+						diameter="20"
+						strokeWidth="3"
+						[color]="color"
+					></mat-progress-spinner>
+					{{ content }}
+				</p>
+			</div>
+		</mat-card-content>
+	</mat-card>
+	<div *ngIf="!loading"  @fadeInUp class="card overflow-hidden w-full max-w-md">
+		<div class="p-6 pb-0 flex flex-col items-center justify-center">
+			<div class="fill-current text-center">
+				<img class="w-16" src="assets/img/logo/logo.svg" />
+			</div>
+		</div>
+
+		<div class="text-center mt-4">
+			<h2 class="title m-0">Company Name</h2>
+			<h4 class="body-2 text-secondary m-0">
+				Log in with your credentials below.
+			</h4>
+			<mat-error *ngIf="serverMessage !== ''" class="mt-2">
+				{{ serverMessage }}
+			</mat-error>
+		</div>
+
+		<div [formGroup]="form" class="p-6 flex flex-col gap-4">
+			<div class="flex flex-col">
+				<mat-form-field class="flex-1">
+					<mat-label>Username</mat-label>
+					<input formControlName="username" matInput required />
+					<mat-error *ngIf="form.controls.username.hasError('required')"
+						>We need a username to log you in.
+					</mat-error>
+					<mat-error *ngIf="form.controls.username.hasError('maxlength')">
+						Username should be max 12 characters.
+					</mat-error>
+					<mat-error *ngIf="form.controls.username.hasError('pattern')">
+						Username can only contain letters, numbers, and underscores.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field class="flex-1">
+					<mat-label>Password</mat-label>
+					<input
+						[type]="inputType"
+						formControlName="password"
+						matInput
+						required />
+					<button
+						(click)="toggleVisibility()"
+						mat-icon-button
+						matIconSuffix
+						matTooltip="Toggle Visibility"
+						type="button">
+						<mat-icon *ngIf="visible" svgIcon="mat:visibility"></mat-icon>
+						<mat-icon *ngIf="!visible" svgIcon="mat:visibility_off"></mat-icon>
+					</button>
+					<mat-hint>Click the eye to toggle visibility</mat-hint>
+					<mat-error *ngIf="form.controls.password.hasError('required')">
+						We need a password to log you in.
+					</mat-error>
+					<mat-error *ngIf="form.controls.password.hasError('minlength')">
+						Password should be at least 8 characters.
+					</mat-error>					
+				</mat-form-field>
+			</div>
+			<button [disabled]="form.invalid" (click)="send()" color="primary" mat-raised-button type="button">
+				LOGIN
+			</button>
+			<div class="flex items-center justify-end">
+				<a [routerLink]="['/forgot-password']" class="caption"
+					>Forgot Password?</a
+				>
+			</div>
+		</div>
+	</div>
+</div>

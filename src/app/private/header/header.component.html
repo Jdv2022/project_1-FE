@@ -1,0 +1,81 @@
+<div
+    [class.container]="isVerticalLayout$ | async"
+    class="toolbar text-default w-full px-6 flex items-center">
+	<button
+		(click)="openSidenav()"
+		[class.hidden]="isDesktop$ | async"
+		mat-icon-button
+		type="button">
+		<mat-icon svgIcon="mat:menu"></mat-icon>
+	</button>
+    <span class="text-lg font-medium">Dashboards</span>
+    <div class="w-0.5 h-6 bg-gray-200 mx-2 backdrop-blur-md"></div>
+
+    <vex-breadcrumbs
+        [crumbs]="['Analytics']"
+        class="flex-auto">
+    </vex-breadcrumbs>
+
+    <a
+        *ngIf="isVerticalLayout$ | async"
+        [routerLink]="['/']"
+        class="ltr:mr-4 rtl:ml-4 flex items-center">
+        <img
+            alt="Logo"
+            class="w-8 select-none"
+            src="assets/img/logo/logo.svg" />
+        <h1
+            [class.hidden]="isDesktop$ | async"
+            class="text-2xl font-bold tracking-wide ltr:pl-4 rtl:pr-4 m-0 select-none">
+            {{ title$ | async }}
+        </h1>
+    </a>
+
+    <div
+        *ngIf="(isVerticalLayout$ | async) && (isNavbarInToolbar$ | async)"
+        [class.hidden]="!(isDesktop$ | async)"
+        class="px-6 flex-none flex items-center">
+        <private-vex-navigation-item
+            *ngFor="let item of navigationItems$ | async"
+            [item]="item">
+        </private-vex-navigation-item>
+    </div>
+
+    <span class="flex-1"></span>
+
+    <div class="-mx-1 flex items-center">
+        <div class="px-1">
+            <vex-header-notifications></vex-header-notifications>
+        </div>
+        <div class="px-1">
+            <button (click)="openQuickpanel()" mat-icon-button type="button">
+                <mat-icon color="primary" svgIcon="mat:bookmarks"></mat-icon>
+            </button>
+        </div>
+    </div>
+</div>
+<nav
+	[tabPanel]="tabPanel"
+	class="border border-1 border-gray-200 space-x-3"
+	mat-tab-nav-bar>
+	<ng-container *ngFor="let link of links; let last = last">
+		<a
+			#rla="routerLinkActive"
+			[active]="rla.isActive"
+			[disabled]="link.disabled"
+			[routerLink]="link.route"
+			mat-tab-link
+			routerLinkActive="active-link"
+			class="text-xs !h-6">
+			{{ link.label }}
+		</a>
+		<div *ngIf="!last" class="w-px h-10 bg-gray-300"></div>
+	</ng-container>
+</nav>
+
+<mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
+
+<vex-navigation
+    *ngIf="(isVerticalLayout$ | async) && (isNavbarBelowToolbar$ | async)"
+    [class.hidden]="!(isDesktop$ | async)">
+</vex-navigation>

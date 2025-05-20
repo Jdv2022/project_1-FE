@@ -1,0 +1,11 @@
+<vex-base-layout *ngIf="config$ | async as config">
+	<mat-sidenav-container class="vex-layout-sidenav-container">
+		<mat-sidenav-content class="vex-layout-sidenav-content">
+			<vex-header [class.dark]="config.layout === 'vertical'" class="vex-header">
+			</vex-header>
+			<main class="vex-layout-content">
+				<router-outlet></router-outlet>
+			</main>
+		</mat-sidenav-content>
+	</mat-sidenav-container>
+</vex-base-layout>

@@ -1,0 +1,21 @@
+<vex-base-layout *ngIf="config$ | async as config">
+    <mat-sidenav-container class="vex-layout-sidenav-container">
+        <mat-sidenav
+            (closedStart)="onSidenavClosed()"
+            [disableClose]="!!(sidenavDisableClose$ | async)"
+            [fixedInViewport]="!!(sidenavFixedInViewport$ | async)"
+            [mode]="(sidenavMode$ | async) ?? 'side'"
+            [opened]="!!(sidenavOpen$ | async)">
+            <vex-sidenav [collapsed]="!!(sidenavCollapsed$ | async)"></vex-sidenav>
+        </mat-sidenav>
+        <mat-sidenav-content class="vex-layout-sidenav-content">
+            <vex-header [class.dark]="config.layout === 'vertical'" class="vex-header sticky top-0 z-10"></vex-header>
+
+            <main class="vex-layout-content m-0 px-0 pb-12">
+                <router-outlet></router-outlet>
+            </main>
+
+            <vex-footer *ngIf="config.footer.visible" class="vex-footer"></vex-footer>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</vex-base-layout>

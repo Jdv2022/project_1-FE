@@ -1,0 +1,419 @@
+<div @stagger class="p-6 container">
+	<h2 class="title mb-4 flex items-center">
+		<span
+			@scaleIn
+			class="w-10 h-10 rounded-full text-primary-600 mr-3 flex items-center justify-center bg-primary-600/10">
+			<mat-icon class="icon-sm" svgIcon="mat:description"></mat-icon>
+		</span>
+		<span @fadeInRight class="block">Registration Form</span>
+	</h2>
+  
+	<div @fadeInUp class="card overflow-hidden">
+		<mat-horizontal-stepper #stepper="matHorizontalStepper" [linear]="true">
+			<ng-template matStepperIcon="edit">
+				<mat-icon svgIcon="mat:done_all"></mat-icon>
+			</ng-template>
+  
+			<ng-template matStepperIcon="done">
+				<mat-icon svgIcon="mat:done_all"></mat-icon>
+			</ng-template>
+  
+			<mat-step [stepControl]="createAccountFormGroup">
+				<!-- <form [formGroup]="createAccountFormGroup" autocomplete="off"> -->
+				<form [formGroup]="createAccountFormGroup">
+					<ng-template matStepLabel>User Details</ng-template>
+					<h2 class="title m-0">User Details</h2>
+					<div class="subheading-1">
+						Set up user details
+					</div>
+					<div class="mt-4 flex flex-col gap-2">
+						<div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+							<mat-form-field class="flex-auto">
+								<mat-error *ngIf="createAccountFormGroup.controls['firstName'].errors as errors">
+									<span *ngIf="errors['required']">First name must not be empty</span>
+									<span *ngIf="!errors['required'] && errors['minlength']">First name should be at least 2 characters.</span>
+									<span *ngIf="!errors['required'] && !errors['minlength'] && errors['maxlength']">First name should be max 50 characters.</span>
+									<span *ngIf="!errors['required'] && !errors['minlength'] && !errors['maxlength'] && errors['pattern']">
+									  	First name can only contain letters.
+									</span>
+								</mat-error>
+								<mat-label>First name</mat-label>
+								<input formControlName="firstName" matInput required />
+							</mat-form-field>
+							<mat-form-field class="flex-auto">
+								<mat-error *ngIf="createAccountFormGroup.controls['middleName'].errors as errors">
+									<span *ngIf="errors['required']">Middle name must not be empty</span>
+									<span *ngIf="!errors['required'] && errors['minlength']">Middle name should be at least 2 characters.</span>
+									<span *ngIf="!errors['required'] && !errors['minlength'] && errors['maxlength']">Middle name should be max 50 characters.</span>
+									<span *ngIf="!errors['required'] && !errors['minlength'] && !errors['maxlength'] && errors['pattern']">
+									  	Middle name can only contain letters.
+									</span>
+								</mat-error>
+								<mat-label>Middle name</mat-label>
+								<input formControlName="middleName" matInput required />
+							</mat-form-field>
+							<mat-form-field class="flex-auto">
+								<mat-error *ngIf="createAccountFormGroup.controls['lastName'].errors as errors">
+									<span *ngIf="errors['required']">Last name must not be empty</span>
+									<span *ngIf="!errors['required'] && errors['minlength']">Last name should be at least 2 characters.</span>
+									<span *ngIf="!errors['required'] && !errors['minlength'] && errors['maxlength']">Last name should be max 50 characters.</span>
+									<span *ngIf="!errors['required'] && !errors['minlength'] && !errors['maxlength'] && errors['pattern']">
+									  	Last name can only contain letters.
+									</span>
+								</mat-error>
+								<mat-label>Last name</mat-label>
+								<input formControlName="lastName" matInput required />
+							</mat-form-field>
+						</div>
+						<mat-form-field class="flex-auto">
+							<mat-error *ngIf="createAccountFormGroup.controls['email'].errors as errors">
+								<span *ngIf="errors['required']">Email is required.</span>
+								<span *ngIf="!errors['required'] && errors['email']">Invalid email format.</span>
+								<span *ngIf="!errors['required'] && !errors['email'] && errors['maxlength']">
+								  	Email should be max 100 characters.
+								</span>
+							  </mat-error>
+							<mat-label>E-Mail</mat-label>
+							<input formControlName="email" matInput required />
+						</mat-form-field>
+						<div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+							<mat-form-field class="flex-auto">
+								<mat-error *ngIf="createAccountFormGroup.controls['address'].errors as errors">
+									<span *ngIf="errors['required']">Address must not be empty</span>
+								</mat-error>
+								<mat-label>Address</mat-label>
+								<input formControlName="address" matInput required />
+							</mat-form-field>
+							<mat-form-field>
+								<mat-error *ngIf="createAccountFormGroup.controls['phone'].errors as errors">
+									<span *ngIf="errors['required']">Phone number must not be empty</span>
+								</mat-error>
+								<mat-label>Mobile Phone</mat-label>
+								<input formControlName="phone" placeholder="Enter your phone&hellip;" matInput required />
+								<mat-icon matIconPrefix svgIcon="mat:smartphone"></mat-icon>
+							</mat-form-field>
+						</div>
+						<div class="flex flex-col md:flex-row gap-2 sm:gap-6">
+							<mat-form-field class="flex-none">
+								<mat-error *ngIf="createAccountFormGroup.controls['gender'].errors as errors">
+									<span *ngIf="errors['required']">Gender must not be empty</span>
+								</mat-error>
+								<mat-label>Gender</mat-label>
+								<mat-select formControlName="gender" placeholder="Select a fruit&hellip;" matInput required>
+									<mat-option value="Apples">Male</mat-option>
+									<mat-option value="Peaches">Female</mat-option>
+								</mat-select>
+							</mat-form-field>
+							<mat-form-field>
+								<mat-error *ngIf="createAccountFormGroup.controls['birthdate'].errors as errors">
+									<span *ngIf="errors['required']">Birthdate must not be empty.</span>
+									<span *ngIf="!errors['required'] && errors['underage']">Must be 18 years old.</span>
+								</mat-error>
+								<mat-label>Birthdate</mat-label>
+								<input formControlName="birthdate" [matDatepicker]="datepickerRef" matInput placeholder="Enter or select your birthdate&hellip;" matInput required/>
+								<mat-datepicker-toggle
+									[for]="datepickerRef"
+									matIconSuffix></mat-datepicker-toggle>
+								<mat-datepicker #datepickerRef></mat-datepicker>
+								<mat-hint>Click on the icon</mat-hint>
+							</mat-form-field>
+							<mat-form-field class="flex-auto">
+								<mat-error *ngIf="createAccountFormGroup.controls['department'].errors as errors">
+									<span *ngIf="errors['required']">Department must not be empty.</span>
+								</mat-error>
+								<mat-label>Department</mat-label>
+								<mat-select formControlName="department" placeholder="Select a fruit&hellip;" matInput required>
+									<mat-option value="Apples">RE</mat-option>
+									<mat-option value="Peaches">BE</mat-option>
+								</mat-select>
+							</mat-form-field>
+							<mat-form-field class="flex-none">
+								<mat-error *ngIf="createAccountFormGroup.controls['position'].errors as errors">
+									<span *ngIf="errors['required']">Position must not be empty.</span>
+								</mat-error>
+								<mat-label>Position</mat-label>
+								<mat-select formControlName="position" placeholder="Select a fruit&hellip;" matInput required>
+									<mat-option value="Apples">RE</mat-option>
+									<mat-option value="Peaches">BE</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+						<div class="flex flex-col items-center bg-gray-50 my-5">
+							<div class="flex items-center content-center min-h-[300px] gap-x-6">
+									<!-- Start Drop Zone -->
+								<div
+									*ngIf="!uploadFile" 
+									class="relative flex flex-col outline-blue-500 outline-2 -outline-offset-4 outline-dashed w-[200px] h-[200px] rounded-2xl items-center justify-center"
+								>
+									<input
+										#fileInput
+										type="file"
+										(change)="handleChange($event)"
+										[accept]="allowedFileTypes"
+										class="absolute w-full h-full cursor-pointer opacity-0 top-0 left-0"
+									/>
+						
+									<span class="mb-6">
+										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-10 h-10">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
+										</svg>
+									</span>
+						
+									<p class="text-center text-xs max-w-[90%]">
+										Upload Profile Picture <br />
+										(PNG, JPG, SVG)
+									</p>
+						
+									<button
+										type="button"
+										(click)="fileInput.click()"
+										class="z-10 mt-6 text-blue-50 px-4 py-1 bg-blue-500 rounded-lg font-medium text-xs hover:bg-blue-800 ease-in-out"
+										>
+										Browse File
+									</button>
+								</div>
+								<!-- End Drop Zone -->
+						
+								<!-- Start Preview Image -->
+								<div
+									*ngIf="fileUrl && uploadFile"
+									[ngStyle]="{ 'background-image': 'url(' + fileUrl + ')' }"
+									class="flex flex-col justify-end border w-[350px] h-[350px] rounded-2xl items-center relative bg-cover bg-center overflow-hidden bg-gray-300 my-2"
+								>
+									<div
+										class="flex flex-col w-full p-4 bg-white"
+										>
+										<p class="mb-6">{{ uploadFile.name }}</p>
+										<div class="flex gap-3 justify-center">
+											<button
+												type="button"
+												[disabled]="isUploading"
+												(click)="handleRemovesFile()"
+												class="text-sm font-medium w-[50%] border border-red-500 px-4 py-3 rounded-lg text-red-500 hover:bg-red-500 hover:text-white ease-in-out"
+												>
+											REMOVE
+											</button>
+										</div>
+									</div>
+								</div>
+								<!-- End Preview Image -->
+							</div>
+						</div>
+					</div>
+		
+					<div class="actions flex items-center justify-end gap-2">
+						<button
+							(click)="stepper.reset()"
+							[disabled]="createAccountFormGroup.pristine"
+							color="primary"
+							mat-button
+							type="button">
+							Reset
+						</button>
+						<button
+							[disabled]="createAccountFormGroup.invalid"
+							color="primary"
+							mat-raised-button
+							matStepperNext>
+							Next
+						</button>
+					</div>
+				</form>
+			</mat-step>
+	
+			<mat-step [stepControl]="createAccountFormGroup">
+				<form [formGroup]="createAccountFormGroup">
+					<ng-template matStepLabel>Create an account</ng-template>
+		
+					<h2 class="title m-0">Login Credentials</h2>
+					<div class="subheading-1">
+						Enter your password you will use to log in.
+					</div>
+
+					<div class="mt-4 flex flex-col gap-2">
+						<mat-form-field class="flex-auto">
+							<mat-error *ngIf="createAccountFormGroup.controls['userName'].errors as errors">
+								<span *ngIf="errors['required']">Username must not be empty</span>
+							</mat-error>
+							<mat-label>Username</mat-label>
+							<input formControlName="userName" matInput required />
+						</mat-form-field>
+						<mat-form-field class="flex-auto">
+							<mat-label>Password</mat-label>
+							<input
+								[type]="passwordInputType"
+								formControlName="password"
+								matInput
+								required />
+							<button
+								(click)="showPassword()"
+								*ngIf="passwordInputType === 'password'"
+								mat-icon-button
+								matIconSuffix
+								type="button">
+								<mat-icon svgIcon="mat:visibility"></mat-icon>
+							</button>
+							<button
+								(click)="hidePassword()"
+								*ngIf="passwordInputType === 'text'"
+								mat-icon-button
+								matIconSuffix
+								type="button">
+								<mat-icon svgIcon="mat:visibility_off"></mat-icon>
+							</button>
+							<mat-hint>
+								Your password should be atleast 8 characters long.
+							</mat-hint>
+						</mat-form-field>
+					</div>
+		
+					<div class="actions flex items-center justify-end gap-2">
+						<button color="primary" mat-button matStepperPrevious type="button">
+							Previous
+						</button>
+						<button
+							[disabled]="createAccountFormGroup.invalid"
+							color="primary"
+							mat-raised-button
+							matStepperNext>
+							Next
+						</button>
+					</div>
+				</form>
+			</mat-step>
+	
+			<mat-step [stepControl]="confirmFormGroup">
+				<form [formGroup]="confirmFormGroup">
+					<ng-template matStepLabel>Confirm Creation</ng-template>
+		
+					<div class="title m-0">Details summary.</div>
+					<div class="subheading-1">
+						To finish registration, please review the information and click on
+						"Create Account".
+					</div>
+
+					<div class="grid grid-cols-1 gap-x-10 gap-y-4 w-full mt-5">
+						<div class="flex flex-col items-center bg-gray-50 my-5">
+							<div
+								*ngIf="fileUrl && uploadFile"
+								[ngStyle]="{ 'background-image': 'url(' + fileUrl + ')' }"
+								class="flex flex-col justify-end border w-[350px] h-[350px] rounded-2xl items-center relative bg-cover bg-center overflow-hidden bg-gray-300 my-2">
+							</div>
+							<div
+								*ngIf="!fileUrl && !uploadFile"
+								class="flex flex-col justify-center border w-[200px] h-[200px] rounded-2xl items-center relative bg-gray-300 my-2 bg-cover bg-center"
+								[ngStyle]="{ 'background-image': 'url(assets/img/avatars/noavatar.png)' }">
+								<mat-icon class="text-gray-500 text-7xl">person</mat-icon>
+							</div>
+						</div>
+						<table
+							@stagger
+							[dataSource]="dataSource"
+							class="w-full"
+							mat-table>
+
+							<!-- Text Columns -->
+							<ng-container *ngFor="let column of columns;">
+								<ng-container
+									*ngIf="column.type === 'text'"
+									[matColumnDef]="column.property">
+									<th
+										*matHeaderCellDef
+										class="uppercase"
+										mat-header-cell
+										mat-sort-header>
+										{{ column.label }}
+									</th>
+									<td *matCellDef="let row; let rowIndex = index" [ngClass]="column.cssClasses" mat-cell>
+										<span class="flex items-center">
+											<ng-container *ngIf="row['field'] === 'Password' && column.property === 'value'">
+												<span>
+													{{ passwordInputTypes[rowIndex] === 'text' ? passwordShow : passwordHide  }}
+												</span>
+												<button
+													(click)="togglePassword(rowIndex)"
+													mat-icon-button
+													type="button">
+													<mat-icon [svgIcon]="passwordInputTypes[rowIndex] === 'text' ? 'mat:visibility' : 'mat:visibility_off'"></mat-icon>
+												</button>
+											</ng-container>
+											<ng-container *ngIf="!(row['field'] === 'Password' && column.property === 'value')">
+												{{ row[column.property] }}
+											</ng-container>
+										</span>
+									</td>																	
+								</ng-container>
+							</ng-container>
+							<!-- Label Column -->
+							<ng-container matColumnDef="labels">
+								<th
+									*matHeaderCellDef
+									class="uppercase"
+									mat-header-cell
+									mat-sort-header>
+									Labels
+								</th>
+								<td *matCellDef="let row" mat-cell>
+									<div
+									(click)="$event.stopPropagation()"
+									class="flex items-center gap-1">
+									<div
+										*ngFor="let label of row.labels"
+										[ngClass]="[label.textClass, label.bgClass]"
+										class="rounded px-2 py-1 font-medium text-xs flex-none">
+										{{ label.text }}
+									</div>
+									<div
+										class="bg-base text-hint cursor-pointer hover:bg-hover flex-none flex items-center justify-center">
+										<mat-icon class="icon-sm" svgIcon="mat:add"></mat-icon>
+									</div>
+									</div>
+								</td>
+							</ng-container>
+
+							<!-- Action Column -->
+							<ng-container matColumnDef="actions">
+							<th *matHeaderCellDef mat-header-cell mat-sort-header></th>
+							<td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+								<button
+								(click)="$event.stopPropagation()"
+								mat-icon-button
+								type="button">
+								<mat-icon svgIcon="mat:more_horiz"></mat-icon>
+								</button>
+							</td>
+							</ng-container>
+
+							<tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
+							<tr
+								*matRowDef="let row; columns: visibleColumns"
+								@fadeInUp
+								class="hover:bg-hover transition duration-400 ease-out-swift"
+							mat-row></tr>
+						</table>
+					</div>
+					<div class="mt-4 flex flex-col gap-2">
+						<mat-checkbox class="checkbox" formControlName="terms">
+							This information are correct. *
+						</mat-checkbox>
+					</div>
+		
+					<div class="actions flex items-center justify-end gap-2">
+						<button color="primary" mat-button matStepperPrevious type="button">
+							Previous
+						</button>
+						<button
+							(click)="submit()"
+							[disabled]="confirmFormGroup.invalid"
+							color="primary"
+							mat-raised-button
+							matStepperNext>
+							Create Account
+						</button>
+					</div>
+				</form>
+			</mat-step>
+	  	</mat-horizontal-stepper>
+	</div>
+</div>
+  
