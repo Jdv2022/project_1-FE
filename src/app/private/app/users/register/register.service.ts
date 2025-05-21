@@ -24,4 +24,9 @@ export class RegisterService extends ApiBase {
 		return this.uploadFile(data);
 	}
 
+	public getRegistrationFormData(data: ModelRequestBase): Observable<ModelResponseBase> {
+		data.endpoint = "web/private/user/registration/form/data";
+		return this.post(data);
+	}
+
 }

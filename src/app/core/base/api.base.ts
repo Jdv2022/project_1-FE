@@ -29,7 +29,7 @@ export abstract class ApiBase {
 	}
 	
 	protected post<ModelResponseBase>(apiArgs: ModelRequestBase): Observable<ModelResponseBase> {
-		return this.http.post<ModelResponseBase>(`${this.baseUrl}/${apiArgs.endpoint}`, {...apiArgs});
+		return this.http.post<ModelResponseBase>(`${this.baseUrl}/${apiArgs.endpoint}`, apiArgs);
 	}
 
 	public uploadFile(data: FileModelRequestBase): Observable<FileModelResponseBase> {

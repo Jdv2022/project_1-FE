@@ -122,9 +122,10 @@
 									<span *ngIf="errors['required']">Department must not be empty.</span>
 								</mat-error>
 								<mat-label>Department</mat-label>
-								<mat-select formControlName="department" placeholder="Select a fruit&hellip;" matInput required>
-									<mat-option value="Apples">RE</mat-option>
-									<mat-option value="Peaches">BE</mat-option>
+								<mat-select formControlName="department" placeholder="Select department&hellip;" matInput required>
+									<mat-option *ngFor="let dept of departments" [value]="dept.value">
+										{{ dept.label }}
+									</mat-option>
 								</mat-select>
 							</mat-form-field>
 							<mat-form-field class="flex-none">

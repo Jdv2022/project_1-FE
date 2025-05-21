@@ -33,6 +33,7 @@ import { LogService } from 'src/app/core/services/log.service';
 import { RegisterService } from './register.service';
 import { RegisterModel } from './register.model';
 import { FileModelRequestBase } from 'src/app/core/base/file.model.request.base';
+import { ModelRequestBase } from 'src/app/core/base/model.request.base';
 
 interface ReviewTable {
     field: string;
@@ -86,7 +87,7 @@ export class RegisterComponent implements OnInit {
 	isUploading = false;
 	fileUrl!: string | null;
 	uploadFile: File | null = null;
-
+	departments: Array<any> = [];
 	/**
 	 * Horizontal Stepper
 	 */
@@ -175,12 +176,11 @@ export class RegisterComponent implements OnInit {
 		phone: ['09171234567', Validators.required],
 		gender: ['Apples', Validators.required],
 		birthdate: ['1990-01-01', [Validators.required, this.minimumAgeValidator(18)]],
-		department: ['Apples', Validators.required],
+		department: [null, Validators.required],
 		position: ['Apples', Validators.required],
 		userName: ['johndoe', Validators.required],
 		password: ['12345678', Validators.compose([Validators.required, Validators.minLength(8)])],
 	});
-	
 
 	confirmFormGroup: UntypedFormGroup = this.fb.group({
 		terms: [null, Validators.requiredTrue]
@@ -219,6 +219,11 @@ export class RegisterComponent implements OnInit {
 		this.createAccountFormGroup.valueChanges.subscribe((formValues) => {
 			this.updateTable(formValues);
 		});
+		this.registerService.getRegistrationFormData(new ModelRequestBase()).subscribe(
+			(response) => {
+				console.log(response)
+			}
+		)
 	}
 
 	updateTable(formValues: UntypedFormGroup): void {
