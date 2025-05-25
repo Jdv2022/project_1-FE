@@ -7,17 +7,11 @@ import {
     OnInit,
     ViewChild
   } from '@angular/core';
-  import { Observable, of, ReplaySubject } from 'rxjs';
-  import { filter } from 'rxjs/operators';
   import { MatTableDataSource, MatTableModule } from '@angular/material/table';
   import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
   import { MatSort, MatSortModule } from '@angular/material/sort';
   import { MatDialog, MatDialogModule } from '@angular/material/dialog';
   import { TableColumn } from '@vex/interfaces/table-column.interface';
-  import {
-    aioTableData,
-    aioTableLabels
-  } from '../../../../../static-data/aio-table-data';
   import { SelectionModel } from '@angular/cdk/collections';
   import { fadeInUp400ms } from '@vex/animations/fade-in-up.animation';
   import { stagger40ms } from '@vex/animations/stagger.animation';
@@ -26,7 +20,6 @@ import {
     ReactiveFormsModule,
     UntypedFormControl
   } from '@angular/forms';
-  import { MatSelectChange } from '@angular/material/select';
   import { MatCheckboxModule } from '@angular/material/checkbox';
   import { MatMenuModule } from '@angular/material/menu';
   import { MatIconModule } from '@angular/material/icon';
@@ -39,15 +32,20 @@ import {
   import { VexPageLayoutComponent } from '@vex/components/vex-page-layout/vex-page-layout.component';
   import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   import { MatInputModule } from '@angular/material/input';
-import { Customer } from 'src/app/pages/apps/aio-table/interfaces/customer.model';
 import { CustomerCreateUpdateComponent } from 'src/app/pages/apps/aio-table/customer-create-update/customer-create-update.component';
-  
+import { ListUsersModel } from './list.users.model';
+import { ListService } from './list.service';
+import { ModelRequestBase } from 'src/app/core/base/model.request.base';
+import { ReplaySubject } from 'rxjs';
+import { USERS_HEIRARCHY } from 'src/static-data/users-heirarchy';
+
   @Component({
     selector: 'vex-list',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss'],
     animations: [fadeInUp400ms, stagger40ms],
     standalone: true,
+	providers: [ListService],
     imports: [
         VexPageLayoutComponent,
         VexBreadcrumbsComponent,
@@ -79,13 +77,12 @@ export class ListsComponent implements OnInit, AfterViewInit {
      * Simulating a service with HTTP that returns Observables
      * You probably want to remove this and do all requests in a service with HTTP
      */
-    subject$: ReplaySubject<Customer[]> = new ReplaySubject<Customer[]>(1);
-    data$: Observable<Customer[]> = this.subject$.asObservable();
-    customers: Customer[] = [];
+    subject$: ReplaySubject<ListUsersModel[]> = new ReplaySubject<ListUsersModel[]>(1);
+    customers: ListUsersModel[] = [];
 
     @Input()
-    columns: TableColumn<Customer>[] = [
-        { label: 'Image', property: 'image', type: 'image', visible: true },
+    columns: TableColumn<ListUsersModel>[] = [
+        { label: 'Image', property: 'userDetailsProfileImageURL', type: 'image', visible: true },
         {
             label: 'Name',
             property: 'name',
@@ -93,58 +90,57 @@ export class ListsComponent implements OnInit, AfterViewInit {
             visible: true,
             cssClasses: ['font-medium']
         },
-        {
-            label: 'First Name',
-            property: 'firstName',
-            type: 'text',
-            visible: false,
-        },
-        { label: 'Last Name', property: 'lastName', type: 'text', visible: false },
-        {
-            label: 'Department',
-            property: 'address',
-            type: 'text',
-            visible: true,
-            cssClasses: ['text-secondary', 'font-medium']
-        },
-        {
-            label: 'Street',
-            property: 'street',
-            type: 'text',
-            visible: false,
-            cssClasses: ['text-secondary', 'font-medium']
-        },
-        {
-            label: 'Zipcode',
-            property: 'zipcode',
-            type: 'text',
-            visible: false,
-            cssClasses: ['text-secondary', 'font-medium']
-        },
-        {
-            label: 'City',
-            property: 'city',
-            type: 'text',
-            visible: false,
-            cssClasses: ['text-secondary', 'font-medium']
-        },
-        {
+		{
             label: 'Phone',
-            property: 'phoneNumber',
+            property: 'userDetailsPhone',
             type: 'text',
             visible: true,
             cssClasses: ['text-secondary', 'font-medium']
         },
-        { label: 'Labels', property: 'labels', type: 'button', visible: true },
-        { label: 'Actions', property: 'actions', type: 'button', visible: true }
+		{
+            label: 'Department',
+            property: 'userDepartmentsDepartmentName',
+            type: 'text',
+            visible: true,
+            cssClasses: ['text-secondary', 'font-medium']
+        },
+        {
+            label: 'Address',
+            property: 'userDetailsAddress',
+            type: 'text',
+            visible: true,
+            cssClasses: ['text-secondary', 'font-medium']
+        },
+        {
+            label: 'Birth Date',
+            property: 'userDetailsDateOfBirth',
+            type: 'text',
+            visible: true,
+            cssClasses: ['text-secondary', 'font-medium']
+        },
+		{
+            label: 'Email Address',
+            property: 'userDetailsEmail',
+            type: 'text',
+            visible: true,
+            cssClasses: ['text-secondary', 'font-medium']
+        },
+		{
+            label: 'Gender',
+            property: 'userDetailsGender',
+            type: 'text',
+            visible: true,
+            cssClasses: ['text-secondary', 'font-medium']
+        },
+        { label: 'Heirarchy', property: 'heirarchy', type: 'badge', visible: true },
     ];
     pageSize = 10;
     pageSizeOptions: number[] = [5, 10, 20, 50];
-    dataSource!: MatTableDataSource<Customer>;
-    selection = new SelectionModel<Customer>(true, []);
+    dataSource!: MatTableDataSource<ListUsersModel>;
+    selection = new SelectionModel<ListUsersModel>(true, []);
     searchCtrl = new UntypedFormControl();
 
-    labels = aioTableLabels;
+    // labels = USERS_HEIRARCHY;
 
     @ViewChild(MatPaginator, { static: true }) paginator?: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort?: MatSort;
@@ -153,6 +149,7 @@ export class ListsComponent implements OnInit, AfterViewInit {
 
     constructor(
 		private dialog: MatDialog,
+		private listService: ListService
 	) {}
 
     get visibleColumns() {
@@ -166,21 +163,21 @@ export class ListsComponent implements OnInit, AfterViewInit {
      * We are simulating this request here.
      */
     getData() {
-        return of(aioTableData.map((customer) => new Customer(customer)));
+        // return of(aioTableData.map((customer) => new ListUsersModel(customer)));
     }
 
     ngOnInit() {
-        this.getData().subscribe((customers) => {
-        	this.subject$.next(customers);
-        });
-
         this.dataSource = new MatTableDataSource();
 
-        this.data$.pipe(filter<Customer[]>(Boolean)).subscribe((customers) => {
-			this.customers = customers;
-			this.dataSource.data = customers;
-        });
-
+		this.listService.getUserList(new ModelRequestBase()).subscribe(
+			(response) => {
+				const users = response.payload.map((user: any) => {
+					return new ListUsersModel(user);
+				});
+				this.dataSource.data = users;
+			}
+		)
+		console.log(this.dataSource)
         this.searchCtrl.valueChanges
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((value) => this.onFilterChange(value));
@@ -196,31 +193,7 @@ export class ListsComponent implements OnInit, AfterViewInit {
         }
     }
 
-    updateCustomer(customer: Customer) {
-        this.dialog
-        .open(CustomerCreateUpdateComponent, {
-            data: customer
-        })
-        .afterClosed()
-        .subscribe((updatedCustomer) => {
-            /**
-             * Customer is the updated customer (if the user pressed Save - otherwise it's null)
-             */
-            if (updatedCustomer) {
-            /**
-             * Here we are updating our local array.
-             * You would probably make an HTTP request here.
-             */
-            const index = this.customers.findIndex(
-                (existingCustomer) => existingCustomer.id === updatedCustomer.id
-            );
-            this.customers[index] = new Customer(updatedCustomer);
-            this.subject$.next(this.customers);
-            }
-        });
-    }
-
-    deleteCustomer(customer: Customer) {
+    deleteCustomer(customer: ListUsersModel) {
         /**
          * Here we are updating our local array.
          * You would probably make an HTTP request here.
@@ -235,7 +208,7 @@ export class ListsComponent implements OnInit, AfterViewInit {
         this.subject$.next(this.customers);
     }
 
-    deleteCustomers(customers: Customer[]) {
+    deleteCustomers(customers: ListUsersModel[]) {
         /**
          * Here we are updating our local array.
          * You would probably make an HTTP request here.
@@ -252,7 +225,7 @@ export class ListsComponent implements OnInit, AfterViewInit {
         this.dataSource.filter = value;
     }
 
-    toggleColumnVisibility(column: TableColumn<Customer>, event: Event) {
+    toggleColumnVisibility(column: TableColumn<ListUsersModel>, event: Event) {
         event.stopPropagation();
         event.stopImmediatePropagation();
         column.visible = !column.visible;
@@ -276,9 +249,9 @@ export class ListsComponent implements OnInit, AfterViewInit {
         return column.property;
     }
 
-    onLabelChange(change: MatSelectChange, row: Customer) {
-        const index = this.customers.findIndex((c) => c === row);
-        this.customers[index].labels = change.value;
-        this.subject$.next(this.customers);
-    }
+    // onLabelChange(change: MatSelectChange, row: ListUsersModel) {
+    //     const index = this.customers.findIndex((c) => c === row);
+    //     this.customers[index].labels = change.value;
+    //     this.subject$.next(this.customers);
+    // }
 }

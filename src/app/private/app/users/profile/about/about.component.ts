@@ -34,6 +34,7 @@ export class AboutComponent {
 	updatedAt: string = '-';
 	createdBy: string = '-';
 	updatedBy: string = '-';
+	userDepartmentsDepartmentName: string = '-';
 
 	constructor(
 		private profileService: ProfileService
@@ -51,6 +52,7 @@ export class AboutComponent {
 					this.userDetailsGender = profile.payload.userDetailsGender ?? '-';
 					this.userDetailsDateOfBirth = profile.payload.userDetailsDateOfBirth ?? '-';
 					this.daysBeforeBirthday = profile.payload.daysTillBirthday ?? '-';
+					this.userDepartmentsDepartmentName = profile.payload.userDepartmentsDepartmentName ?? '-';
 					this.createdAt = profile.payload.created_at ?? '-';
 					this.updatedAt = profile.payload.updated_at ?? '-';
 					this.createdBy = profile.payload.created_by ?? '-';

@@ -61,7 +61,9 @@ export class ProfileComponent implements OnInit {
 		this.profileServie.getUserDetails(requestModel).subscribe(
 			(response) => {
 				this.full_name = response.payload.userDetailsFirstName + ' '+ response.payload.userDetailsMiddleName +' ' + response.payload.userDetailsLastName;
-				this.userDetailsProfileImageURL =  environment.getBaseUrl + response.payload.userDetailsProfileImageURL;
+				if(response.payload.userDetailsProfileImageURL != 'null') {
+					this.userDetailsProfileImageURL =  environment.getBaseUrl + response.payload.userDetailsProfileImageURL;
+				}
 			}
 		)
 	}

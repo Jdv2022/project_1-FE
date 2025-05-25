@@ -67,79 +67,58 @@
 				<!--- Note that these columns can be defined in any order.
 					The actual rendered columns are set as a property on the row definition" -->
 				<!-- Image Column -->
-				<ng-container matColumnDef="image">
+				<ng-container matColumnDef="userDetailsProfileImageURL">
 					<th *matHeaderCellDef mat-header-cell></th>
 					<td *matCellDef="let row" class="pl-4 w-12 min-w-12 p-0" mat-cell>
-						<img [src]="row['imageSrc']" class="avatar h-8 w-8 align-middle" />
+						<img [src]="row['userDetailsProfileImageURL']" class="avatar h-8 w-8 align-middle" />
 					</td>
 				</ng-container>
 
 				<!-- Text Columns -->
 				<ng-container *ngFor="let column of columns; trackBy: trackByProperty">
-					<ng-container
-						*ngIf="column.type === 'text'"
-						[matColumnDef]="column.property">
-						<th
-							*matHeaderCellDef
-							class="uppercase"
-							mat-header-cell
-							mat-sort-header>
-							{{ column.label }}
+					<ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
+						<th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header>
+						  	{{ column.label }}
 						</th>
 						<td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
-							{{ row[column.property] }}
+							<ng-container *ngIf="column.property === 'name'; else normalText">
+								<a [href]="'/private/users/profile/' + row['id']" class="text-blue-600">{{ row[column.property] }}</a>
+							</ng-container>
+							<ng-template #normalText>
+								{{ row[column.property] }}
+							</ng-template>
 						</td>
-					</ng-container>
+					  </ng-container>
 				</ng-container>
 
 				<!-- Label Column -->
-				<ng-container matColumnDef="labels">
-				<th
-					*matHeaderCellDef
-					class="uppercase"
-					mat-header-cell
-					mat-sort-header>
-					Labels
-				</th>
-				<td *matCellDef="let row" mat-cell>
-					<div
-					(click)="$event.stopPropagation()"
-					class="flex items-center gap-1">
-					<div
-						*ngFor="let label of row.labels"
-						[ngClass]="[label.textClass, label.bgClass]"
-						class="rounded px-2 py-1 font-medium text-xs flex-none">
-						{{ label.text }}
-					</div>
-					<div
-						class="bg-base text-hint cursor-pointer hover:bg-hover flex-none flex items-center justify-center">
-						<mat-icon class="icon-sm" svgIcon="mat:add"></mat-icon>
-					</div>
-					</div>
-				</td>
-				</ng-container>
-
-				<!-- Action Column -->
-				<ng-container matColumnDef="actions">
-				<th *matHeaderCellDef mat-header-cell mat-sort-header></th>
-				<td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
-					<button
-					(click)="$event.stopPropagation()"
-					[matMenuTriggerData]="{ customer: row }"
-					[matMenuTriggerFor]="actionsMenu"
-					mat-icon-button
-					type="button">
-					<mat-icon svgIcon="mat:more_horiz"></mat-icon>
-					</button>
-				</td>
+				<ng-container matColumnDef="heirarchy">
+					<th
+						*matHeaderCellDef
+						class="uppercase"
+						mat-header-cell
+						mat-sort-header>
+						Heirarchy
+					</th>
+					<td *matCellDef="let row" mat-cell>
+						<div
+							(click)="$event.stopPropagation()"
+							class="flex items-center gap-1">
+							<div
+								*ngFor="let label of row.heirarchy"
+								[ngClass]="[label.textClass, label.bgClass]"
+								class="rounded px-2 py-1 font-medium text-xs flex-none">
+								{{ label.text }}
+							</div>
+						</div>
+					</td>
 				</ng-container>
 
 				<tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
 				<tr
-					(click)="updateCustomer(row)"
 					*matRowDef="let row; columns: visibleColumns"
 					@fadeInUp
-					class="hover:bg-hover transition duration-400 ease-out-swift cursor-pointer"
+					class="hover:bg-hover transition duration-400 ease-out-swift"
 				mat-row></tr>
 			</table>
 
@@ -165,17 +144,4 @@
             {{ column.label }}
         </mat-checkbox>
     </button>
-</mat-menu>
-  
-<mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
-    <ng-template let-customer="customer" matMenuContent>
-        <button (click)="updateCustomer(customer)" mat-menu-item>
-            <mat-icon svgIcon="mat:edit"></mat-icon>
-            <span>Modify</span>
-        </button>
-        <button (click)="deleteCustomer(customer)" mat-menu-item>
-            <mat-icon svgIcon="mat:delete"></mat-icon>
-            <span>Delete</span>
-        </button>
-    </ng-template>
 </mat-menu>
