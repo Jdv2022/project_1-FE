@@ -28,3 +28,22 @@ html {
   // --vex-color-warn: yellow;
   // --vex-color-warn-contrast: black;
 }
+
+.r {
+	border-width: 2px !important;
+	border-style: solid !important;
+	border-color: red !important;
+}
+
+.y {
+	border-width: 2px !important; 
+	border-style: solid !important;
+	border-color: yellow !important;
+}
+
+.b {
+	border-width: 2px !important; 
+	border-style: solid !important;
+	border-color: blue !important;
+}
+

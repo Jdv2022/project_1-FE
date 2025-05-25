@@ -8,7 +8,7 @@ import {
 	ValidatorFn,
 	Validators
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { fadeInUp400ms } from '@vex/animations/fade-in-up.animation';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
@@ -31,15 +31,16 @@ import { TableColumn } from '@vex/interfaces/table-column.interface';
 import { Observable, ReplaySubject } from 'rxjs';
 import { LogService } from 'src/app/core/services/log.service';
 import { RegisterService } from './register.service';
-import { RegisterModel } from './register.model';
 import { FileModelRequestBase } from 'src/app/core/base/file.model.request.base';
 import { ModelRequestBase } from 'src/app/core/base/model.request.base';
+import { NotificationModalComponent } from 'src/app/private/utilities/notification-modal/notification.modal.component';
+import { MatDialog } from '@angular/material/dialog';
+import { LoadingModalComponent } from 'src/app/private/utilities/loading-modal/loading.modal.component';
 
 interface ReviewTable {
     field: string;
     value: string;
 }
-
 
 @Component({
   	selector: 'vex-register',
@@ -74,6 +75,7 @@ interface ReviewTable {
 		MatInputModule,
 		CommonModule,
 		MatTableModule,
+		NotificationModalComponent
 	]
 })
 
@@ -88,99 +90,100 @@ export class RegisterComponent implements OnInit {
 	fileUrl!: string | null;
 	uploadFile: File | null = null;
 	departments: Array<any> = [];
+	roles: Array<any> = [];
 	/**
 	 * Horizontal Stepper
 	 */
-	// createAccountFormGroup: UntypedFormGroup = this.fb.group({
-	// 	firstName: [null, 
-	// 		[
-	// 			Validators.required, 
-	// 			Validators.minLength(2), 
-	// 			Validators.maxLength(50), 
-	// 			Validators.pattern('^[a-zA-Z ]+$')
-	// 		]
-	// 	],
-	// 	middleName: [null, 
-	// 		[
-	// 			Validators.required, 
-	// 			Validators.minLength(2), 
-	// 			Validators.maxLength(50), 
-	// 			Validators.pattern('^[a-zA-Z ]+$')
-	// 		]
-	// 	],
-	// 	lastName: [null, 
-	// 		[
-	// 			Validators.required, 
-	// 			Validators.minLength(2), 
-	// 			Validators.maxLength(50), 
-	// 			Validators.pattern('^[a-zA-Z ]+$')
-	// 		]
-	// 	],
-	// 	email: [null,
-	// 		[
-	// 			Validators.required,
-	// 			Validators.email,
-	// 			Validators.maxLength(100),
-	// 		],
-	// 	],
-	// 	address: [null, 
-	// 		[
-	// 			Validators.required, 
-	// 		]
-	// 	],
-	// 	phone: [null, Validators.required],
-	// 	gender: [null, Validators.required],
-	// 	birthdate: [null, 
-	// 		[
-	// 			Validators.required,
-	// 			this.minimumAgeValidator(18)
-	// 		]
-	// 	],
-	// 	department: [null, Validators.required],
-	// 	position: [null, Validators.required],
-	// 	userName: [
-	// 		null,
-	// 		Validators.compose([Validators.required])
-	// 	],
-	// 	password: [
-	// 		null,
-	// 		Validators.compose([Validators.required, Validators.minLength(8)])
-	// 	],
-	// });
-
 	createAccountFormGroup: UntypedFormGroup = this.fb.group({
-		firstName: ['John', [
-			Validators.required,
-			Validators.minLength(2),
-			Validators.maxLength(50),
-			Validators.pattern('^[a-zA-Z ]+$')
-		]],
-		middleName: ['Mads', [
-			Validators.required,
-			Validators.minLength(2),
-			Validators.maxLength(50),
-			Validators.pattern('^[a-zA-Z ]+$')
-		]],
-		lastName: ['Doe', [
-			Validators.required,
-			Validators.minLength(2),
-			Validators.maxLength(50),
-			Validators.pattern('^[a-zA-Z ]+$')
-		]],
-		email: ['johndoe@example.com', [
-			Validators.required,
-			Validators.email,
-			Validators.maxLength(100)
-		]],
-		address: ['123 Main Street', [Validators.required]],
-		phone: ['09171234567', Validators.required],
-		gender: ['Apples', Validators.required],
-		birthdate: ['1990-01-01', [Validators.required, this.minimumAgeValidator(18)]],
+		firstName: [null, 
+			[
+				Validators.required, 
+				Validators.minLength(2), 
+				Validators.maxLength(50), 
+				Validators.pattern('^[a-zA-Z ]+$')
+			]
+		],
+		middleName: [null, 
+			[
+				Validators.required, 
+				Validators.minLength(2), 
+				Validators.maxLength(50), 
+				Validators.pattern('^[a-zA-Z ]+$')
+			]
+		],
+		lastName: [null, 
+			[
+				Validators.required, 
+				Validators.minLength(2), 
+				Validators.maxLength(50), 
+				Validators.pattern('^[a-zA-Z ]+$')
+			]
+		],
+		email: [null,
+			[
+				Validators.required,
+				Validators.email,
+				Validators.maxLength(100),
+			],
+		],
+		address: [null, 
+			[
+				Validators.required, 
+			]
+		],
+		phone: [null, Validators.required],
+		gender: [null, Validators.required],
+		birthdate: [null, 
+			[
+				Validators.required,
+				this.minimumAgeValidator(18)
+			]
+		],
 		department: [null, Validators.required],
-		position: ['Apples', Validators.required],
-		userName: ['johndoe', Validators.required],
-		password: ['12345678', Validators.compose([Validators.required, Validators.minLength(8)])],
+		position: [null, Validators.required],
+		userName: [
+			null,
+			Validators.compose([Validators.required])
+		],
+		password: [
+			null,
+			Validators.compose([Validators.required, Validators.minLength(8)])
+		],
 	});
+
+	// createAccountFormGroup: UntypedFormGroup = this.fb.group({
+	// 	firstName: ['John', [
+	// 		Validators.required,
+	// 		Validators.minLength(2),
+	// 		Validators.maxLength(50),
+	// 		Validators.pattern('^[a-zA-Z ]+$')
+	// 	]],
+	// 	middleName: ['Mads', [
+	// 		Validators.required,
+	// 		Validators.minLength(2),
+	// 		Validators.maxLength(50),
+	// 		Validators.pattern('^[a-zA-Z ]+$')
+	// 	]],
+	// 	lastName: ['Doe', [
+	// 		Validators.required,
+	// 		Validators.minLength(2),
+	// 		Validators.maxLength(50),
+	// 		Validators.pattern('^[a-zA-Z ]+$')
+	// 	]],
+	// 	email: ['johndoe@example.com', [
+	// 		Validators.required,
+	// 		Validators.email,
+	// 		Validators.maxLength(100)
+	// 	]],
+	// 	address: ['123 Main Street', [Validators.required]],
+	// 	phone: ['09171234567', Validators.required],
+	// 	gender: ['Apples', Validators.required],
+	// 	birthdate: ['1990-01-01', [Validators.required, this.minimumAgeValidator(18)]],
+	// 	department: [null, Validators.required],
+	// 	position: ['Apples', Validators.required],
+	// 	userName: ['johndoe', Validators.required],
+	// 	password: ['12345678', Validators.compose([Validators.required, Validators.minLength(8)])],
+	// });
 
 	confirmFormGroup: UntypedFormGroup = this.fb.group({
 		terms: [null, Validators.requiredTrue]
@@ -210,7 +213,9 @@ export class RegisterComponent implements OnInit {
 		private fb: UntypedFormBuilder,
 		private cd: ChangeDetectorRef,
 		private log: LogService,
-		private registerService: RegisterService
+		private registerService: RegisterService,
+		private dialog: MatDialog,
+		private router: Router
 	) {}
 
 	ngOnInit(): void {
@@ -221,6 +226,8 @@ export class RegisterComponent implements OnInit {
 		});
 		this.registerService.getRegistrationFormData(new ModelRequestBase()).subscribe(
 			(response) => {
+				this.departments = JSON.parse(response.payload.departments);
+				this.roles = JSON.parse(response.payload.roles);
 				console.log(response)
 			}
 		)
@@ -303,6 +310,11 @@ export class RegisterComponent implements OnInit {
 	}
 
 	submit() {
+		const loadingModal = this.dialog.open(LoadingModalComponent, {
+			width: '400px', 
+			disableClose: true,
+			data: { message: 'Registration successful!' } 
+		});
 		const data = {
 			username: this.createAccountFormGroup.value.userName,
 			password: this.createAccountFormGroup.value.password,
@@ -322,10 +334,26 @@ export class RegisterComponent implements OnInit {
 		model.file = this.uploadFile;
 		this.registerService.submit(model).subscribe({
 			next: (response) => {
-				console.log(response)
+				loadingModal.close();
+				this.log.logDebug(`Registration Data Response: ${JSON.stringify(response)}`);
+				this.dialog.open(NotificationModalComponent, {
+					width: '400px', 
+					disableClose: true,
+					data: { message: 'Registration successful!' } 
+				}).afterClosed().subscribe(
+					() => this.router.navigate(
+						['/private/users/profile/'+response.payload.user_id]
+					)
+				);
 			},	
 			error: (error) => {
-				this.log.logDebug(`Registration Data Response: ${error}`);
+				loadingModal.close();
+				this.log.logDebug(`Registration Data Response: ${JSON.stringify(error)}`);
+				this.dialog.open(NotificationModalComponent, {
+					width: '400px', 
+					disableClose: true,
+					data: { message: error.error.message, status: 1 } 
+				});
 			}
 		});
 	}

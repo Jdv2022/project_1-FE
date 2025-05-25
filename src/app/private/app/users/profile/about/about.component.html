@@ -1,0 +1,196 @@
+<div class="m-5 mt-6 flex flex-col md:flex-row md:items-start">
+	<div class="flex-auto">
+	  	<div class="card">
+			<div class="px-6 py-4 border-b">
+		  		<h2 class="title m-0">About</h2>
+			</div>
+  
+			<div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+				<div class="py-3 flex items-center">
+					<div
+						@scaleIn
+						class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+						<mat-icon class="icon-sm" svgIcon="mat:phone"></mat-icon>
+					</div>
+					<div @fadeInRight>
+						<p class="m-0 body-1">{{ userDetailsPhone }}</p>
+						<p class="m-0 caption text-hint">Contact Number</p>
+					</div>
+		  		</div>
+				<div class="py-3 flex items-center">
+					<div
+						@scaleIn
+						class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+						<mat-icon class="icon-sm" svgIcon="mat:work"></mat-icon>
+					</div>
+	
+					<div @fadeInRight>
+						<p class="m-0 body-1">{{ userRolesType1 }}</p>
+						<p class="m-0 caption text-hint">{{ userRolesDescription }}</p>
+					</div>
+				</div>
+	
+				<div class="py-3 flex items-center">
+					<div
+						@scaleIn
+						class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+						<mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+					</div>
+	
+					<div @fadeInRight>
+						<p class="m-0 body-1">{{ userDetailsEmail }}</p>
+						<p class="m-0 caption text-hint">Company Email</p>
+					</div>
+				</div>
+  
+				<div class="py-3 flex items-center">
+					<div
+						@scaleIn
+						class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+						<mat-icon class="icon-sm" svgIcon="mat:access_time"></mat-icon>
+					</div>
+	
+					<div @fadeInRight>
+						<p class="m-0 body-1">Usually available 9am-5pm</p>
+						<p class="m-0 caption text-hint">
+							Shift (Shift Name)
+						</p>
+					</div>
+				</div>
+
+				<div class="py-3 flex items-center">
+					<div
+						@scaleIn
+						class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+						<mat-icon svgIcon="mat:business"></mat-icon>
+					</div>
+	
+					<div @fadeInRight>
+						<p class="m-0 body-1">{{ userDetailsAddress }}</p>
+						<p class="m-0 caption text-hint">
+							Department
+						</p>
+					</div>
+				</div>
+
+				<div class="py-3 flex items-center">
+					<div
+						@scaleIn
+						class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+						<mat-icon svgIcon="mat:location_on"></mat-icon>
+					</div>
+	
+					<div @fadeInRight>
+						<p class="m-0 body-1">{{ userDetailsAddress }}</p>
+						<p class="m-0 caption text-hint">
+							Address
+						</p>
+					</div>
+				</div>
+
+				<div class="py-3 flex items-center">
+					<div
+						@scaleIn
+						class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+						<mat-icon svgIcon="mat:cake"></mat-icon>
+					</div>
+	
+					<div @fadeInRight>
+						<p class="m-0 body-1">{{ userDetailsDateOfBirth }}</p>
+						<p class="m-0 caption text-hint">
+							{{ daysBeforeBirthday }} days before Birthday						
+						</p>
+					</div>
+				</div>
+
+				<div class="py-3 flex items-center">
+					<div
+						@scaleIn
+						class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+						<mat-icon *ngIf="userDetailsGender == 'Male'" svgIcon="mat:male"></mat-icon>
+						<mat-icon *ngIf="userDetailsGender == 'Female'" svgIcon="mat:female"></mat-icon>
+					</div>
+	
+					<div @fadeInRight>
+						<p class="m-0 body-1">{{ userDetailsGender }}</p>
+						<p class="m-0 caption text-hint">
+							Gender						
+						</p>
+					</div>
+				</div>
+
+				<div class="py-3 flex items-center">
+					<div
+						@scaleIn
+						class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+						<mat-icon svgIcon="mat:note_add"></mat-icon>   
+					</div>
+	
+					<div @fadeInRight>
+						<p class="m-0 body-1">{{ createdAt }}</p>
+						<p class="m-0 caption text-hint">
+							Created by: {{ createdBy }}						
+						</p>
+					</div>
+				</div>
+
+				<div class="py-3 flex items-center">
+					<div
+						@scaleIn
+						class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+						<mat-icon svgIcon="mat:update"></mat-icon> 
+					</div>
+	
+					<div @fadeInRight>
+						<p class="m-0 body-1">{{ updatedAt }}</p>
+						<p class="m-0 caption text-hint">
+							Updated by: {{ updatedBy }}				
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div
+		class="card max-w-unset md:max-w-xs w-full flex-none md:ltr:ml-6 md:rtl:mr-6 mt-6 md:mt-0">
+		<div class="px-6 py-4 border-b">
+			<h2 class="title m-0">Current Team Members</h2>
+		</div>
+		<div @stagger class="px-6 py-4 flex flex-col gap-4">
+			<div
+				*ngFor="let member of team; trackBy: trackByName"
+				class="flex items-center">
+				<img
+					@scaleIn
+					[src]="member.imageSrc"
+					alt="Profile Picture"
+					class="avatar ltr:mr-3 rtl:ml-3 flex-none" />
+				<div @fadeInRight class="flex-auto">
+					<h4 class="body-2 m-0 leading-snug">{{ member.name }}</h4>
+					<h5 class="text-secondary m-0 caption leading-none">
+					{{ member.friends }} mutual friends
+					</h5>
+				</div>
+				<button
+					(click)="addFriend(member)"
+					*ngIf="!member.added"
+					color="primary"
+					mat-icon-button
+					type="button">
+					<mat-icon svgIcon="mat:person_add"></mat-icon>
+				</button>
+	
+				<button
+					(click)="removeFriend(member)"
+					*ngIf="member.added"
+					color="primary"
+					mat-icon-button
+					type="button">
+					<mat-icon svgIcon="mat:check"></mat-icon>
+				</button>
+			</div>
+	  	</div>
+	</div>
+</div>
+  

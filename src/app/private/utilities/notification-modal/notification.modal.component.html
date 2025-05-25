@@ -1,0 +1,22 @@
+<mat-card>
+	<mat-card-header 
+			class="p-2"
+			[class.primary-bg]="!status"
+			[class.warn-bg]="status"
+		>
+		<mat-card-title class="text-white">
+			Notification
+		</mat-card-title>
+	</mat-card-header>
+	<mat-card-content class="flex flex-col items-center justify-center px-4 py-2 gap-4">
+		<p class="flex items-center gap-2 min-h-[70px]">
+			{{ notification }}
+		</p>
+		<div>
+			<button mat-raised-button 
+				class="text-white px-8 py-2 bg-gray-500 hover:bg-gray-600"
+				(click)="close()"
+			>Ok</button>
+		</div>
+	  </mat-card-content>	  
+</mat-card>

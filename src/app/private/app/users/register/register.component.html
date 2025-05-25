@@ -100,8 +100,8 @@
 								</mat-error>
 								<mat-label>Gender</mat-label>
 								<mat-select formControlName="gender" placeholder="Select a fruit&hellip;" matInput required>
-									<mat-option value="Apples">Male</mat-option>
-									<mat-option value="Peaches">Female</mat-option>
+									<mat-option value="Male">Male</mat-option>
+									<mat-option value="Female">Female</mat-option>
 								</mat-select>
 							</mat-form-field>
 							<mat-form-field>
@@ -123,8 +123,8 @@
 								</mat-error>
 								<mat-label>Department</mat-label>
 								<mat-select formControlName="department" placeholder="Select department&hellip;" matInput required>
-									<mat-option *ngFor="let dept of departments" [value]="dept.value">
-										{{ dept.label }}
+									<mat-option *ngFor="let dept of departments" [value]="dept.department_name">
+										{{ dept.department_name }}
 									</mat-option>
 								</mat-select>
 							</mat-form-field>
@@ -134,8 +134,9 @@
 								</mat-error>
 								<mat-label>Position</mat-label>
 								<mat-select formControlName="position" placeholder="Select a fruit&hellip;" matInput required>
-									<mat-option value="Apples">RE</mat-option>
-									<mat-option value="Peaches">BE</mat-option>
+									<mat-option *ngFor="let role of roles" [value]="role.type_1">
+										{{ role.type_1 }}
+									</mat-option>
 								</mat-select>
 							</mat-form-field>
 						</div>
