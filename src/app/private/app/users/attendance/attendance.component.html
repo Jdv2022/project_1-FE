@@ -1,7 +1,4 @@
-<div *ngIf="isRefresh" class="h-60">
-	<vex-refresh></vex-refresh>
-</div>
-<div *ngIf="!isRefresh" class="h-full flex flex-col">
+<div class="h-full flex flex-col">
 	<div class="calendar-bg relative text-white flex-none">
 		<div
 			class="bg-black opacity-25 absolute top-0 left-0 right-0 bottom-0 z-0 w-full h-full">
@@ -24,6 +21,7 @@
 							mat-raised-button>Clock In</button>
 						<button 
 							color="primary" 
+							(click)="onClockOut()"
 							[disabled]="isClockOutDisabled"
 							mat-raised-button>Clock out</button>
 					</div>

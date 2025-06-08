@@ -27,6 +27,11 @@ export class AttendanceService extends ApiBase {
 		return this.post(data);
 	}
 
+	clockOut(data: ModelRequestBase): Observable<ModelResponseBase> {
+		data.endpoint = "web/private/user/attendance/clock/out";
+		return this.post(data);
+	}
+
 	getAttendance(data: ModelRequestBase): Observable<ModelResponseBase> {
 		data.endpoint = "web/private/user/attendance";
 		return this.post(data);

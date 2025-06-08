@@ -45,6 +45,8 @@ import { ModelRequestBase } from 'src/app/core/base/model.request.base';
 import { NotificationModalComponent } from 'src/app/private/utilities/notification-modal/notification.modal.component';
 import { LoadingModalComponent } from 'src/app/private/utilities/loading-modal/loading.modal.component';
 import { RefreshComponent } from 'src/app/private/utilities/refresh/refresh.component';
+import { YesNoModalComponent } from 'src/app/private/utilities/yes-no-modal/yes-no-modal.component';
+import { LogService } from 'src/app/core/services/log.service';
   
 const colors: any = {
 	blue: {
@@ -115,18 +117,22 @@ export class AttendanceComponent implements OnInit {
 	isClockOutDisabled: boolean = false;
 	timezone: string = '';
 	currentBrowsedDate: string = '';
-	isRefresh: boolean = false;
 	currentBrowsedDateString: string = '';
 	exactTime: string = '';
 
 	constructor(
 		private dialog: MatDialog,
 		private snackbar: MatSnackBar,
-		private attendanceService: AttendanceService
+		private attendanceService: AttendanceService,
+		private logService: LogService
 	) {}
 
 	ngOnInit(): void {
 		this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		this.initData();
+	}
+
+	private initData(): void {
 		const data = new ModelRequestBase();
 		data.payload = {
 			timezone: this.timezone
@@ -139,7 +145,7 @@ export class AttendanceComponent implements OnInit {
 		)
 	}
 
-	private getAttendace() {
+	private getAttendace(): void {
 		const data2 = new ModelRequestBase();
 		const now = new Date();
 		const year = now.getFullYear();
@@ -159,7 +165,7 @@ export class AttendanceComponent implements OnInit {
 		};
 		this.attendanceService.getAttendance(data2).subscribe(
 			(response) => {
-				console.log(response)
+
 				if((response.payload.dayToday ?? null) && (response.payload.attendance ?? null)) {
 					const isClockedInToday = response.payload.attendance.find((
 						u: { createdAt: string }) => u.createdAt == response.payload.dayToday
@@ -170,6 +176,7 @@ export class AttendanceComponent implements OnInit {
 					}
 					else if(isClockedInToday.timeIn ?? null) {
 						this.isClockInDisabled = true;
+						this.isClockOutDisabled = false;
 					}
 					else if(isClockedInToday.timeOut ?? null) {
 						this.isClockOutDisabled = true;
@@ -177,6 +184,9 @@ export class AttendanceComponent implements OnInit {
 					response.payload.attendance.forEach((u: calendarAddition) => {
 						this.insertTextElementToCalendarDays(u);
 					});
+				}
+				else {
+					this.isClockOutDisabled = true;
 				}
 			}
 		)
@@ -204,7 +214,7 @@ export class AttendanceComponent implements OnInit {
 		const timeIn = document.createElement('span');
 		timeIn.textContent = ` ${u.timeIn ?? '-'}`;
 		timeIn.classList.add('my-custom-style-green');
-		timeIn.style.fontSize = 'clamp(0.75rem, .1vw, 1rem)';
+		timeIn.style.fontSize = 'clamp(0.7rem, .1vw, 1rem)';
 		timeInSpan.textContent = 'Time In:';
 		timeInSpan.classList.add('my-custom-style-small-text');
 		timeInSpan.style.fontSize = 'clamp(0.75rem, .1vw, 1rem)';
@@ -215,7 +225,8 @@ export class AttendanceComponent implements OnInit {
 		const timeOut = document.createElement('span');
 		timeOut.textContent = ` ${u.timeOut ?? '-'}`;
 		timeOut.classList.add('my-custom-style-red');
-		timeOut.style.fontSize = 'clamp(0.75rem, .1vw, 1rem)';
+		timeOut.style.fontSize = 'clamp(0.7rem, .1vw, 1rem)';
+		timeOut.style.maxWidth = '100px';
 		timeOutSpan.textContent = 'Time Out:';
 		timeOutSpan.classList.add('my-custom-style-small-text');
 		timeOutSpan.style.fontSize = 'clamp(0.75rem, .1vw, 1rem)';
@@ -228,7 +239,6 @@ export class AttendanceComponent implements OnInit {
 			element.appendChild(wrapper2);
 			let timeInSpanAttached = true;
 
-			// Handle resize
 			function handleResize() {
 				const width = window.innerWidth;
 
@@ -244,46 +254,9 @@ export class AttendanceComponent implements OnInit {
 				}
 			}
 
-			// Listen to resize
 			window.addEventListener('resize', handleResize);
-
-			// Call once on load
 			handleResize();
 		}
-	}
-
-	onClockIn() {
-		this.isRefresh = true;
-		const loading = this.dialog.open(LoadingModalComponent, {
-			width: '400px', 
-			disableClose: true,
-			data: { message: 'Clocking IN!' } 
-		});
-		let obj = new ModelRequestBase();
-		obj.payload = {
-			timezone: this.timezone
-		}
-		this.attendanceService.clockIn(obj).subscribe(
-			(response) => {
-				this.isRefresh = false;
-				this.dialog.open(NotificationModalComponent, {
-					width: '400px', 
-					disableClose: true,
-					data: { message: response.message } 
-				}).afterClosed().subscribe(
-					() => loading.close()
-				);
-			},
-			(error) => {
-				loading.close();
-				this.isRefresh = false;
-				this.dialog.open(NotificationModalComponent, {
-					width: '400px',
-					disableClose: true,
-					data: { message: error.error.message }
-				});
-			}
-		)
 	}
   
 	dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
@@ -354,6 +327,90 @@ export class AttendanceComponent implements OnInit {
   
 	closeOpenMonthViewDay() {
 	  	this.activeDayIsOpen = false;
+	}
+
+	onClockIn() {
+		this.initData();
+		const loading = this.dialog.open(LoadingModalComponent, {
+			width: '400px', 
+			disableClose: true,
+			data: { message: 'Clocking IN!' } 
+		});
+		let obj = new ModelRequestBase();
+		obj.payload = {
+			timezone: this.timezone
+		}
+		this.attendanceService.clockIn(obj).subscribe(
+			(response) => {
+				this.dialog.open(NotificationModalComponent, {
+					width: '400px', 
+					disableClose: true,
+					data: { message: response.message } 
+				}).afterClosed().subscribe(
+					() => {
+						loading.close();
+					}
+				);
+			},
+			(error) => {
+				loading.close();
+				this.dialog.open(NotificationModalComponent, {
+					width: '400px',
+					disableClose: true,
+					data: { message: error.error.message }
+				});
+			}
+		)
+	}
+
+	onClockOut() {
+		let obj = new ModelRequestBase();
+		obj.payload = {
+			timezone: this.timezone
+		}
+		const now = new Date();
+		const options: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+		const formattedTime = now.toLocaleTimeString('en-US', options).toLowerCase();		
+		this.dialog.open(YesNoModalComponent, {
+			width: '400px', 
+			disableClose: true,
+			data: { message: `Are you sure you want to clock out on ${formattedTime}?` }
+		}).afterClosed().subscribe(
+			(result) => {
+				if (result === true) {
+					const loading = this.dialog.open(LoadingModalComponent, {
+						width: '400px', 
+						disableClose: true,
+						data: { message: 'Clocking Out!' } 
+					});
+					this.attendanceService.clockOut(obj).subscribe(
+						(response) => {
+							this.dialog.open(NotificationModalComponent, {
+								width: '400px', 
+								disableClose: true,
+								data: { message: response.message } 
+							}).afterClosed().subscribe(
+								() => {
+									loading.close();
+									this.initData();
+								}
+							);
+						},
+						(error) => {
+							loading.close();
+							this.dialog.open(NotificationModalComponent, {
+								width: '400px',
+								disableClose: true,
+								data: { message: error.error.message }
+							});
+						}
+					)
+				} 
+				else if (result === false) {
+					this.logService.logDebug('User said NO');
+				}
+			}
+		)
 	}
 }
   
