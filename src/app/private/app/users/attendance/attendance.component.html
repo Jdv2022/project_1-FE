@@ -1,0 +1,68 @@
+<div *ngIf="isRefresh" class="h-60">
+	<vex-refresh></vex-refresh>
+</div>
+<div *ngIf="!isRefresh" class="h-full flex flex-col">
+	<div class="calendar-bg relative text-white flex-none">
+		<div
+			class="bg-black opacity-25 absolute top-0 left-0 right-0 bottom-0 z-0 w-full h-full">
+		</div>
+		<div class="container py-4 px-6 h-60 z-0 relative flex items-end">
+			<div
+				class="flex-auto flex flex-col sm:flex-row justify-between items-center">
+				<div class="text-center sm:text-left">
+					<div class="headline">
+						{{ currentBrowsedDateString }}
+					</div>
+					<div class="mb-2">
+						<span>Shift Schedule</span>
+					</div>
+					<div class="flex gap-2">
+						<button 
+							color="primary" 
+							(click)="onClockIn()"
+							[disabled]="isClockInDisabled"
+							mat-raised-button>Clock In</button>
+						<button 
+							color="primary" 
+							[disabled]="isClockOutDisabled"
+							mat-raised-button>Clock out</button>
+					</div>
+				</div>
+				<div class="actions flex flex-row justify-end items-center">
+					<div class="chevrons flex flex-row items-center space-x-2">
+						<button
+							[(viewDate)]="viewDate"
+							[view]="view"
+							mat-icon-button
+							mwlCalendarPreviousView>
+							<mat-icon svgIcon="mat:chevron_left"></mat-icon>
+						</button>
+					
+						<div>
+							{{ viewDate | calendarDate: view + "ViewTitle" : "en" }}
+						</div>
+					
+						<button
+							[(viewDate)]="viewDate"
+							[disabled]="isClockOutDisabled"
+							[view]="view"
+							mat-icon-button
+							mwlCalendarNextView>
+							<mat-icon svgIcon="mat:chevron_right"></mat-icon>
+						</button>
+					</div>
+				</div>				  
+			</div>
+		</div>
+	</div>
+	<vex-scrollbar
+		[ngSwitch]="view"
+		class="px-0 shadow flex-auto relative container mb-5">
+		<mwl-calendar-month-view
+			*ngSwitchCase="'month'"
+			[refresh]="refresh"
+			[viewDate]="viewDate">
+		</mwl-calendar-month-view>
+	</vex-scrollbar>
+</div>
+  

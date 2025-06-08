@@ -34,42 +34,42 @@ export class EncDecService {
 		}
 	}
 	
-	public decrypt(encryptedText: string): string|object {
+	public decrypt(encryptedText: string): string | object {
 		const rawData = CryptoES.enc.Base64.parse(encryptedText);
 		const rawBytes = rawData.words;
-
+	
 		if (rawBytes.length < 12) {
 			throw new Error("Invalid encrypted payload format.");
 		}
-
-		const iv = CryptoES.lib.WordArray.create(rawBytes.slice(0, 4)); 
-		const cipherText = CryptoES.lib.WordArray.create(rawBytes.slice(4, -8));
-		const hmac = CryptoES.lib.WordArray.create(rawBytes.slice(-8));
-		
+	
+		// Parse correct lengths (16 bytes IV, 32 bytes HMAC, rest is cipherText)
+		const iv = CryptoES.lib.WordArray.create(rawBytes.slice(0, 4)); // 16 bytes (4 words)
+		const cipherText = CryptoES.lib.WordArray.create(rawBytes.slice(4, -8)); // middle part
+		const hmac = CryptoES.lib.WordArray.create(rawBytes.slice(-8)); // last 32 bytes (8 words)
+	
 		const key = CryptoES.enc.Base64.parse(this.getAESKey().replace("base64:", ""));
-
-		const computedHmac = CryptoES.HmacSHA256(cipherText, key);
-		const computedHmacBase64 = CryptoES.enc.Base64.stringify(computedHmac);
-		const receivedHmacBase64 = CryptoES.enc.Base64.stringify(hmac);
-		if (computedHmacBase64 !== receivedHmacBase64) {
+	
+		// Combine iv + cipherText for HMAC verification
+		const ivAndCipher = iv.clone().concat(cipherText);
+		const computedHmac = CryptoES.HmacSHA256(ivAndCipher, key);
+	
+		if (CryptoES.enc.Base64.stringify(computedHmac)
+				.localeCompare(CryptoES.enc.Base64.stringify(hmac)) !== 0) {
 			throw new Error("HMAC verification failed. Data may be tampered.");
 		}
-
+	  
 		const decrypted = CryptoES.AES.decrypt(
 			{ ciphertext: cipherText },
 			key,
 			{ iv, mode: CryptoES.mode.CBC, padding: CryptoES.pad.Pkcs7 }
 		);
-
+	
 		const decryptedText = decrypted.toString(CryptoES.enc.Utf8);
-
-		if (!decryptedText) {
-			throw new Error("Decryption failed. Output is empty.");
-		}
-		const parsedObject = this.safeParseJSON(decryptedText);
-
-		return parsedObject;
+		if (!decryptedText) throw new Error("Decryption failed. Output is empty.");
+	
+		return this.safeParseJSON(decryptedText);
 	}
+	
 	
 	public encrypt(data: ModelRequestBase): string {
 		const key = CryptoES.enc.Base64.parse(this.getAESKey().replace("base64:", "")); 

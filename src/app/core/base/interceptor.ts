@@ -33,6 +33,7 @@ export const interceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: Http
 		catchError((error: HttpErrorResponse) => {
 			// If 401, try to refresh token
 			if (error.status === 401) {
+				log.logWarning(`401 Error: Refreshing token...`);
 				log.logDebug("Status is 401");
 				const refreshTokenService = inject(RefreshTokenService);
 				const storageService = inject(StorageService);
@@ -45,6 +46,7 @@ export const interceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: Http
 						const newToken = storageService.getToken(); 
 						const newReq = req.clone({
 							headers: req.headers.set('Authorization', `Bearer ${newToken}`)
+								.set('Timezone', Intl.DateTimeFormat().resolvedOptions().timeZone)
 						});
 						return next(newReq); 
 					}),
@@ -103,7 +105,10 @@ function request(
 	const token = storage.getToken();
 	return req.clone({ 
 		body: reqData,
-		setHeaders: { Authorization: token ? `Bearer ${token}` : '' }
+		setHeaders: { 
+			Authorization: token ? `Bearer ${token}` : '' ,
+			Timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+		}
 	});	  
 }
 

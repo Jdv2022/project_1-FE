@@ -228,7 +228,6 @@ export class RegisterComponent implements OnInit {
 			(response) => {
 				this.departments = JSON.parse(response.payload.departments);
 				this.roles = JSON.parse(response.payload.roles);
-				console.log(response)
 			}
 		)
 	}
@@ -313,7 +312,7 @@ export class RegisterComponent implements OnInit {
 		const loadingModal = this.dialog.open(LoadingModalComponent, {
 			width: '400px', 
 			disableClose: true,
-			data: { message: 'Registration successful!' } 
+			data: { message: 'Saving!' } 
 		});
 		const data = {
 			username: this.createAccountFormGroup.value.userName,

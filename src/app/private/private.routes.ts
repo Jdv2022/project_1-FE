@@ -40,6 +40,11 @@ export const PRIVATE_ROUTES: VexRoutes = [
 								import('src/app/private/app/users/register/register.component').then((m) => m.RegisterComponent)
 							},
 							{
+								path: 'attendance',
+								loadComponent: () =>
+								import('src/app/private/app/users/attendance/attendance.component').then((m) => m.AttendanceComponent)
+							},
+							{
 								path: 'profile/:id',
 								component: ProfileComponent,
 								providers: [ProfileService],

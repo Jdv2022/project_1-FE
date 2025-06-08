@@ -16,16 +16,27 @@ a {
   text-decoration: none;
 }
 
-.active-link {
-	border-left-color: #3b82f6;
-	font-weight: 600;
-	color: #1d4ed8;
-	border-bottom: 1px solid #1d4ed8;
-}
-
 ::ng-deep .mat-mdc-tab-link-container {
-	margin: 0 !important;
+	overflow: visible !important;
+	height: auto !important;
+	margin: 0px !important;
 	padding: 0 !important;
+	border-bottom: 1px solid red;
+}
+  
+::ng-deep .mat-mdc-tab-links {
+	overflow: visible !important;
+	height: auto !important;
+}
+  
+::ng-deep .mat-mdc-tab-link {
+	height: auto !important;
+	white-space: normal !important;
+}
+ 
+::ng-deep .mat-mdc-tab-header {
+	border-bottom: none !important;
+	box-shadow: none !important; 
 }
 
 ::ng-deep .mat-mdc-tab-links {

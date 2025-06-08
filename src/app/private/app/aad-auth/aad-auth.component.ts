@@ -71,17 +71,17 @@ export class AadAuthComponent implements OnInit {
 				error: (error) => {
 					this.log.logError(`Validate Token Data Response: ${JSON.stringify(error)}`);
 					if (this.refreshAttempts < this.maxRefreshAttempts) {
-						this.refreshAttempts++;
-						this.refreshTokenService.refreshToken(new RefreshTokenRequestModel()).subscribe({
-							next: (response) => {
-								this.log.logDebug(`Refresh Token Data Response: ${JSON.stringify(response)}`);
-								const data = new RefreshTokenResponseModel(response);
-								this.storageService.setToken(data.payload);
-							},	
-							error: (error) => {
-								this.log.logError(`Refresh Token Data Response: ${JSON.stringify(error)}`);
-							}
-						});
+						// this.refreshAttempts++;
+						// this.refreshTokenService.refreshToken(new RefreshTokenRequestModel()).subscribe({
+						// 	next: (response) => {
+						// 		this.log.logDebug(`Refresh Token Data Response: ${JSON.stringify(response)}`);
+						// 		const data = new RefreshTokenResponseModel(response);
+						// 		this.storageService.setToken(data.payload);
+						// 	},	
+						// 	error: (error) => {
+						// 		this.log.logError(`Refresh Token Data Response: ${JSON.stringify(error)}`);
+						// 	}
+						// });
 					} 
 					else {
 						this.storageService.deleteToken();
