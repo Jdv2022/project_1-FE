@@ -27,7 +27,7 @@ pipeline {
                             ssh -o StrictHostKeyChecking=no jd@212.85.25.94 '
                                 cd /var/www/html/sunset/FE &&
                                 if [ ! -d ".git" ]; then
-                                    git clone https://github.com/Jdv2022/project_1-gateway . 
+                                    git clone https://github.com/Jdv2022/project_1-FE . 
                                 else
                                     git fetch --prune
                                     git reset --hard origin/main
