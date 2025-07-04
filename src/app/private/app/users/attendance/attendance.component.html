@@ -1,5 +1,5 @@
-<div class="h-full flex flex-col">
-	<div class="calendar-bg relative text-white flex-none">
+<div class="w-full overflow-x-auto h-full flex flex-col">
+	<div class="min-w-[500px] overflow-x-auto  calendar-bg relative text-white flex-none">
 		<div
 			class="bg-black opacity-25 absolute top-0 left-0 right-0 bottom-0 z-0 w-full h-full">
 		</div>
@@ -55,7 +55,7 @@
 	</div>
 	<vex-scrollbar
 		[ngSwitch]="view"
-		class="px-0 shadow flex-auto relative container mb-5">
+		class="min-w-[500px] overflow-x-auto px-0 shadow flex-auto relative container mb-5">
 		<mwl-calendar-month-view
 			*ngSwitchCase="'month'"
 			[refresh]="refresh"

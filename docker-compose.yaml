@@ -1,0 +1,7 @@
+services:
+  angular:
+    image: httpd:2.4
+    volumes:
+      - ./dist/:/usr/local/apache2/htdocs/
+    ports:
+      - "8080:80"

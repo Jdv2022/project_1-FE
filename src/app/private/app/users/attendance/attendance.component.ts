@@ -113,8 +113,8 @@ export class AttendanceComponent implements OnInit {
 	viewDate: Date = new Date();
 	refresh: Subject<any> = new Subject();
 	activeDayIsOpen = true;
-	isClockInDisabled: boolean = false;
-	isClockOutDisabled: boolean = false;
+	isClockInDisabled: boolean = true;
+	isClockOutDisabled: boolean = true;
 	timezone: string = '';
 	currentBrowsedDate: string = '';
 	currentBrowsedDateString: string = '';
@@ -165,12 +165,15 @@ export class AttendanceComponent implements OnInit {
 		};
 		this.attendanceService.getAttendance(data2).subscribe(
 			(response) => {
-
 				if((response.payload.dayToday ?? null) && (response.payload.attendance ?? null)) {
 					const isClockedInToday = response.payload.attendance.find((
 						u: { createdAt: string }) => u.createdAt == response.payload.dayToday
 					);
-					if((isClockedInToday.timeIn ?? null) && (isClockedInToday.timeOut ?? null)) {
+					if(isClockedInToday === undefined) {
+						this.isClockInDisabled = false;
+						this.isClockOutDisabled = true;
+					}
+					else if((isClockedInToday.timeIn ?? null) && (isClockedInToday.timeOut ?? null)) {
 						this.isClockInDisabled = true;
 						this.isClockOutDisabled = true;
 					}
