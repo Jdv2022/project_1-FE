@@ -45,6 +45,13 @@ pipeline {
                             '
                         """
                         
+						sh """
+                            ssh -o StrictHostKeyChecking=no jd@212.85.25.94 '
+                                cd /var/www/html/sunset/FE &&
+                                ng install
+                            '
+                        """
+
                         sh """
                             ssh -o StrictHostKeyChecking=no jd@212.85.25.94 '
                                 cd /var/www/html/sunset/FE &&
