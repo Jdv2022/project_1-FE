@@ -38,7 +38,7 @@ pipeline {
                 
                         // Upload .env files
                         sh """
-                            scp -o StrictHostKeyChecking=no \$ENV_FILE jd@212.85.25.94:/var/www/html/sunset/FE/src/environments/environment.ts
+                            scp -o StrictHostKeyChecking=no \$FE_ENV jd@212.85.25.94:/var/www/html/sunset/FE/src/environments/environment.ts
                         
                             ssh -o StrictHostKeyChecking=no jd@212.85.25.94 '
                                 sudo chmod 644 /var/www/html/sunset/FE/src/environments/environment.ts
