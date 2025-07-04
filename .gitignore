@@ -2,6 +2,5 @@ node_modules/
 .angular/
 package-lock.json
 yarn.lock
-src/environments/
 src/@vex/
 dist/
