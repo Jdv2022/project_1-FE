@@ -44,13 +44,6 @@ pipeline {
                                 sudo chmod 644 /var/www/html/sunset/FE/src/environments/environment.ts
                             '
                         """
-                        
-						sh """
-                            ssh -o StrictHostKeyChecking=no jd@212.85.25.94 '
-                                cd /var/www/html/sunset/FE &&
-                                NG_CLI_ANALYTICS=ci ng build
-                            '
-                        """
 
                         sh """
                             ssh -o StrictHostKeyChecking=no jd@212.85.25.94 '
