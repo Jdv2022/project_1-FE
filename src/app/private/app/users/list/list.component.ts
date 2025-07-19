@@ -171,13 +171,14 @@ export class ListsComponent implements OnInit, AfterViewInit {
 
 		this.listService.getUserList(new ModelRequestBase()).subscribe(
 			(response) => {
+				console.log(response)
 				const users = response.payload.map((user: any) => {
 					return new ListUsersModel(user);
 				});
 				this.dataSource.data = users;
 			}
 		)
-		console.log(this.dataSource)
+
         this.searchCtrl.valueChanges
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((value) => this.onFilterChange(value));

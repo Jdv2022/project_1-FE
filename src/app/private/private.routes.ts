@@ -45,6 +45,21 @@ export const PRIVATE_ROUTES: VexRoutes = [
 								import('src/app/private/app/users/attendance/attendance.component').then((m) => m.AttendanceComponent)
 							},
 							{
+								path: 'attendance',
+								loadComponent: () =>
+								import('src/app/private/app/users/attendance/attendance.component').then((m) => m.AttendanceComponent)
+							},
+							{
+								path: 'create/team',
+								loadComponent: () =>
+								import('src/app/private/app/users/create-team/create-team.component').then((m) => m.CreateTeamComponent)
+							},
+							{
+								path: 'team/details/:id',
+								loadComponent: () =>
+								import('src/app/private/app/users/team/team.component').then((m) => m.TeamComponent)
+							},
+							{
 								path: 'profile/:id',
 								component: ProfileComponent,
 								providers: [ProfileService],

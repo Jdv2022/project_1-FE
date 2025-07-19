@@ -60,7 +60,7 @@ export class NavigationLoaderService {
 				{
 					type: 'link',
 					label: 'Create Team',
-					route: 'users/teams/create',
+					route: 'users/create/team',
 					icon: 'mat:group_add',
 					routerLinkActiveOptions: { exact: true }
 				},
