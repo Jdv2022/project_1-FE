@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { TeamService } from './team.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
@@ -15,23 +14,24 @@ import { scaleFadeIn400ms } from '@vex/animations/scale-fade-in.animation';
 import { LogService } from 'src/app/core/services/log.service';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
-import { EditTeamModalComponent } from 'src/app/private/app/users/team/edit-team-modal/edit-team-modal.component';
 import { ModelRequestBase } from 'src/app/core/base/model.request.base';
 import { NotificationModalComponent } from 'src/app/private/utilities/notification-modal/notification.modal.component';
 import { YesNoModalComponent } from 'src/app/private/utilities/yes-no-modal/yes-no-modal.component';
 import { MatCardModule } from '@angular/material/card';
 import { LoadingModalComponent } from 'src/app/private/utilities/loading-modal/loading.modal.component';
+import { DepartmentService } from './department.service';
+import { EditDepartmentModalComponent } from './edit-department-modal/edit-department-modal.component';
 
 interface suggestedMembers {
 	id: number;
 	name: string;
 	department: string;
-	isOnTeam: string;
+	isOnDepartment: string;
 	profileImageName: string;
 	profileImageUrl: string;
 }
 
-interface teamMembers {
+interface departmentMembers {
 	id: number;
 	firstName: string;
 	lastName: string;
@@ -45,7 +45,7 @@ interface teamMembers {
 
 
 @Component({
-	selector: 'vex-team',
+	selector: 'vex-department',
 	standalone: true,
 	animations: [
 		scaleIn400ms,
@@ -67,22 +67,22 @@ interface teamMembers {
 		AsyncPipe,
 		MatCardModule
 	],
-	templateUrl: './team.component.html',
-	styleUrl: './team.component.scss',
-	providers: [TeamService]
+	templateUrl: './department.component.html',
+	styleUrl: './department.component.scss',
+	providers: [DepartmentService]
 })
 
-export class TeamComponent implements OnInit {
+export class DepartmentComponent implements OnInit {
 
-	team_name: string = '-';
+	department_name: string = '-';
 	description: string = '-';
 	suggestions: suggestedMembers[] = [];
-	members: teamMembers[] = [];
-	team_id!: number;
+	members: departmentMembers[] = [];
+	department_id!: number;
 
 	constructor(
 		private route: ActivatedRoute,
-		private teamService: TeamService,
+		private departmentService: DepartmentService,
 		private log: LogService,
 		private dialog: MatDialog,
 		private router: Router
@@ -90,29 +90,30 @@ export class TeamComponent implements OnInit {
 
 	ngOnInit(): void { 
 		this.route.paramMap.subscribe(params => {
-			this.team_id = Number(params.get('id'));
+			this.department_id = Number(params.get('id'));
 			const id = params.get('id')!;
-			this.teamDetails(id);
+			console.log("ASDASDASDASDASD")
+			this.departmentDetails(id);
 		});
 		this.suggestedMembers();
 	}
 
 	toggleEditing() {
-		const dialogRef = this.dialog.open(EditTeamModalComponent, {
+		const dialogRef = this.dialog.open(EditDepartmentModalComponent, {
 			width: '50%',
 			disableClose: true,
-			data: { team_name: this.team_name, description: this.description }
+			data: { department_name: this.department_name, description: this.description }
 		});
 		dialogRef.afterClosed().subscribe(result => {
 			if(result) {
 				let req = new ModelRequestBase();
-				result.team_id = this.route.snapshot.paramMap.get('id');
+				result.department_id = this.route.snapshot.paramMap.get('id');
 				req.payload = result;
-				this.teamService.editTeam(req).subscribe(
+				this.departmentService.editDepartment(req).subscribe(
 					(response) => {
 						console.log(response);
 						const id = response.payload.result;
-						this.teamDetails(id);
+						this.departmentDetails(id);
 					},
 					(error) => {
 						this.log.logError(error);
@@ -131,21 +132,21 @@ export class TeamComponent implements OnInit {
 		this.dialog.open(YesNoModalComponent, {
 			width: '400px', 
 			disableClose: true,
-			data: { message: `Are you sure you want to add ${user.name} to your team?` }
+			data: { message: `Are you sure you want to add ${user.name} to your department?` }
 		}).afterClosed().subscribe(
 			(result) => {
 				if(result) {
 					let loading =this.dialog.open(LoadingModalComponent, {
 						width: '400px', 
 						disableClose: true,
-						data: { message: `Adding ${user.name} to your team!` }
+						data: { message: `Adding ${user.name} to your department!` }
 					})
-					const team_id = this.route.snapshot.paramMap.get('id')!;
+					const department_id = this.route.snapshot.paramMap.get('id')!;
 					const user_id = [user.id];
-					const data = { team_id: team_id, user_id: user_id };
+					const data = { department_id: department_id, user_id: user_id };
 					let model = new ModelRequestBase();
 					model.payload = data;
-					this.teamService.assignUserToTeam(model).subscribe(
+					this.departmentService.assignUserToDepartment(model).subscribe(
 						(response) => {
 							loading.close();
 							this.dialog.open(NotificationModalComponent, {
@@ -154,7 +155,7 @@ export class TeamComponent implements OnInit {
 								data: { message: response.message }
 							})
 							this.suggestedMembers();
-							this.teamDetails(team_id);
+							this.departmentDetails(department_id);
 						}
 					)
 				}
@@ -173,14 +174,14 @@ export class TeamComponent implements OnInit {
 					let loading =this.dialog.open(LoadingModalComponent, {
 						width: '400px', 
 						disableClose: true,
-						data: { message: `Removing ${user.name} to your team!` }
+						data: { message: `Removing ${user.name} to your department!` }
 					})
-					const team_id = this.route.snapshot.paramMap.get('id')!;
+					const department_id = this.route.snapshot.paramMap.get('id')!;
 					const user_id = user.id;
-					const data = { team_id: team_id, user_id: user_id };
+					const data = { department_id: department_id, user_id: user_id };
 					let model = new ModelRequestBase();
 					model.payload = data;
-					this.teamService.removeUserFromTeam(model).subscribe(
+					this.departmentService.removeUserFromDepartment(model).subscribe(
 						(response) => {
 							loading.close();
 							this.dialog.open(NotificationModalComponent, {
@@ -189,7 +190,7 @@ export class TeamComponent implements OnInit {
 								data: { message: response.message }
 							})
 							this.suggestedMembers();
-							this.teamDetails(team_id);
+							this.departmentDetails(department_id);
 						}
 					)
 				}
@@ -197,12 +198,15 @@ export class TeamComponent implements OnInit {
 		)
 	}
 
-	private teamDetails(id: string) {
-		this.teamService.getTeam(id).subscribe(
+	private departmentDetails(id: string) {
+		console.log("ASDASDASDASDASD")
+		this.departmentService.getDepartment(id).subscribe(
 			(response) => {
-				this.team_name = response.payload.teamName;
+				console.log("XXXXX");
+				console.log(response);
+				this.department_name = response.payload.departmentName;
 				this.description = response.payload.description;
-				const data: teamMembers[] = response.payload?.teamLists ?? [];
+				const data: departmentMembers[] = response.payload?.departmentLists ?? [];
 				data.forEach(element => {
 					const date = new Date(element.createdAt);
 					const options: Intl.DateTimeFormatOptions = {
@@ -225,17 +229,17 @@ export class TeamComponent implements OnInit {
 		);
 	}
 
-	deleteTeam() {
+	deleteDepartment() {
 		this.dialog.open(YesNoModalComponent, {
 			width: '400px', 
 			disableClose: true,
-			data: { message: `Are you sure you want to delete this team?` }
+			data: { message: `Are you sure you want to delete this department?` }
 		}).afterClosed().subscribe(
 			(result) => {
 				if(result) {
 					let model = new ModelRequestBase();
-					model.payload = { team_id: this.team_id, user_id: this.team_id };
-					this.teamService.deleteTeam(model).subscribe(
+					model.payload = { department_id: this.department_id, user_id: this.department_id };
+					this.departmentService.deleteDepartment(model).subscribe(
 						(response) => {
 							this.router.navigate([`private/users/teams/departments`]);
 						},
@@ -254,9 +258,9 @@ export class TeamComponent implements OnInit {
 	}
 
 	private suggestedMembers() {
-		this.teamService.getSuggestedMembers().subscribe(
+		this.departmentService.getSuggestedMembers().subscribe(
 			(response) => {
-				const data: suggestedMembers[] = response.payload.teamLists;
+				const data: suggestedMembers[] = response.payload.departmentLists;
 				data.forEach(element => {
 					element.profileImageUrl = element.profileImageUrl != 'null' 
 						? environment.getBaseUrl + element.profileImageUrl 

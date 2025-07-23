@@ -7,6 +7,7 @@ import { UsersComponent } from './app/users.component';
 import { ProfileComponent } from 'src/app/private/app/users/profile/profile.component';
 import PROFILE_ROUTES from './app/users/profile/profile.routes';
 import { ProfileService } from './app/users/profile/profile.service';
+import { TeamsDepartmentComponent } from './app/users/teams-department/teams-department.component';
 
 export const PRIVATE_ROUTES: VexRoutes = [
     {
@@ -58,6 +59,21 @@ export const PRIVATE_ROUTES: VexRoutes = [
 								path: 'team/details/:id',
 								loadComponent: () =>
 								import('src/app/private/app/users/team/team.component').then((m) => m.TeamComponent)
+							},
+							{
+								path: 'teams/departments',
+								loadComponent: () =>
+									import('src/app/private/app/users/teams-department/teams-department.component').then((m) => m.TeamsDepartmentComponent)
+							},
+							{
+								path: 'create/department',
+								loadComponent: () =>
+									import('src/app/private/app/users/create-department/create-department.component').then((m) => m.CreateDepartmentComponent)
+							},
+							{
+								path: 'department/details/:id',
+								loadComponent: () =>
+								import('src/app/private/app/users/department/department.component').then((m) => m.DepartmentComponent)
 							},
 							{
 								path: 'profile/:id',

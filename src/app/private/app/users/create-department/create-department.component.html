@@ -1,0 +1,49 @@
+<form [formGroup]="departmentForm" (ngSubmit)="onSubmit()" [@stagger] class="p-6 container">
+	<div class="flex flex-col sm:flex-row gap-4">
+		<div @fadeInUp class="card flex-auto">
+			<div class="px-6 py-4 border-b flex items-center">
+				<h2 class="title m-0">Create Department</h2>
+			</div>
+	
+			<div class="px-6 py-4 flex flex-col">
+				<label>Department Name</label>
+				<mat-form-field>
+					<input matInput formControlName="department_name" placeholder="Enter your company name&hellip;" />
+					<mat-error *ngIf="departmentForm.get('department_name')?.hasError('required')">
+					Department name is required
+					</mat-error>
+					<mat-error *ngIf="departmentForm.get('department_name')?.hasError('minlength')">
+					Minimum 3 characters
+					</mat-error>
+				</mat-form-field>
+		
+				<label>Department Description</label>
+				<mat-form-field appearance="fill">
+					<mat-label>Description</mat-label>
+					<textarea
+					matInput
+					formControlName="description"
+					placeholder="Enter a brief department description&hellip;"
+					rows="4"></textarea>
+					<mat-error *ngIf="departmentForm.get('description')?.hasError('required')">
+					Description is required
+					</mat-error>
+					<mat-error *ngIf="departmentForm.get('description')?.hasError('minlength')">
+					Minimum 10 characters
+					</mat-error>
+				</mat-form-field>
+	
+				<div class="flex items-center justify-end gap-2">
+					<button
+						color="primary"
+						mat-flat-button
+						type="submit"
+						[disabled]="departmentForm.invalid">
+						Submit
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+  

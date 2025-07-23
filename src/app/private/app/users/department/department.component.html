@@ -8,19 +8,19 @@
 						class="w-12 h-12 rounded-full text-primary-600 ltr:mr-4 rtl:ml-4 flex items-center justify-center bg-primary-600/10">
 						<mat-icon svgIcon="mat:diversity_3"></mat-icon>
 					</span>
-					<span @fadeInRight class="block text-base">Team: {{ team_name }}</span>
+					<span @fadeInRight class="block text-base">Department: {{ department_name }}</span>
 				</h1>
 				<div class="flex gap-2">
 					<button 
 						style="border-radius: 2px" 
 						mat-raised-button color="primary"
 						(click)="toggleEditing()"
-						>Edit Team</button>
+						>Edit Department</button>
 					<button 
 						style="border-radius: 2px" 
 						mat-raised-button color="warn"
-						(click)="deleteTeam()"
-						>Delete Team</button>
+						(click)="deleteDepartment()"
+						>Delete Department</button>
 				</div>
 			</div>
 			<h2>
@@ -67,7 +67,7 @@
 						@scaleFadeIn
 						class="flex-auto flex flex-col items-center justify-center">
 						<img class="m-12 h-64" src="assets/img/illustrations/idea.svg" />
-						<h2 class="headline m-0 text-center">Team has no members</h2>
+						<h2 class="headline m-0 text-center">Department has no members</h2>
 					</div>
 				</div>	
 			</div>
@@ -97,7 +97,7 @@
 					</div>
 					<button
 						(click)="add(user)"
-						*ngIf="user.isOnTeam == 'false'"
+						*ngIf="user.isOnDepartment == 'false'"
 						color="primary"
 						mat-icon-button
 						type="button">
@@ -105,7 +105,7 @@
 					</button>
 
 					<button
-						*ngIf="user.isOnTeam == 'true'"
+						*ngIf="user.isOnDepartment == 'true'"
 						color="primary"
 						mat-icon-button
 						type="button">

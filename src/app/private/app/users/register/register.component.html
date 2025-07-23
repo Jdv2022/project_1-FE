@@ -223,8 +223,8 @@
 				</form>
 			</mat-step>
 	
-			<mat-step [stepControl]="createAccountFormGroup">
-				<form [formGroup]="createAccountFormGroup">
+			<mat-step [stepControl]="accountFormGroup">
+				<form [formGroup]="accountFormGroup">
 					<ng-template matStepLabel>Create an account</ng-template>
 		
 					<h2 class="title m-0">Login Credentials</h2>
@@ -234,7 +234,7 @@
 
 					<div class="mt-4 flex flex-col gap-2">
 						<mat-form-field class="flex-auto">
-							<mat-error *ngIf="createAccountFormGroup.controls['userName'].errors as errors">
+							<mat-error *ngIf="accountFormGroup.controls['userName'].errors as errors">
 								<span *ngIf="errors['required']">Username must not be empty</span>
 							</mat-error>
 							<mat-label>Username</mat-label>
@@ -274,7 +274,7 @@
 							Previous
 						</button>
 						<button
-							[disabled]="createAccountFormGroup.invalid"
+							[disabled]="accountFormGroup.invalid"
 							color="primary"
 							mat-raised-button
 							matStepperNext>

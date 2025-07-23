@@ -38,13 +38,14 @@
 				<div class="flex items-center justify-end">
 					<button
 						class="btn"
-						(click)="close()"
-						type="submit">
+						type="button"
+						(click)="close()">
 						Cancel
 					</button>
 					<button
 						class="btn"
-						[disabled]="teamForm.invalid">
+						[disabled]="teamForm.invalid"
+						type="submit">
 						Submit
 					</button>
 				</div>

@@ -66,8 +66,15 @@ export class NavigationLoaderService {
 				},
 				{
 					type: 'link',
+					label: 'Create Department',
+					route: 'users/create/department',
+					icon: 'mat:domain',
+					routerLinkActiveOptions: { exact: true }
+				},
+				{
+					type: 'link',
 					label: 'Teams & Departments',
-					route: 'users/teams/Departments',
+					route: 'users/teams/departments',
 					icon: 'mat:group',
 					routerLinkActiveOptions: { exact: true }
 				},

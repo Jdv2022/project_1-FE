@@ -141,6 +141,9 @@ export class RegisterComponent implements OnInit {
 		],
 		department: [null, Validators.required],
 		position: [null, Validators.required],
+	});
+
+	accountFormGroup: UntypedFormGroup = this.fb.group({
 		userName: [
 			null,
 			Validators.compose([Validators.required])
@@ -149,7 +152,7 @@ export class RegisterComponent implements OnInit {
 			null,
 			Validators.compose([Validators.required, Validators.minLength(8)])
 		],
-	});
+	})
 
 	// createAccountFormGroup: UntypedFormGroup = this.fb.group({
 	// 	firstName: ['John', [
@@ -315,8 +318,8 @@ export class RegisterComponent implements OnInit {
 			data: { message: 'Saving!' } 
 		});
 		const data = {
-			username: this.createAccountFormGroup.value.userName,
-			password: this.createAccountFormGroup.value.password,
+			username: this.accountFormGroup.value.userName,
+			password: this.accountFormGroup.value.password,
 			address: this.createAccountFormGroup.value.address,
 			birthdate: this.createAccountFormGroup.value.birthdate,
 			department: this.createAccountFormGroup.value.department,

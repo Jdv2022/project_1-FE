@@ -47,4 +47,10 @@ export class TeamService extends ApiBase {
 		return this.post(data);
 	}
 
+	deleteTeam(req: ModelRequestBase): Observable<ModelResponseBase> {
+		this.log.logDebug('deleteTeam');
+		req.endpoint = "web/private/user/team/delete";
+		return this.post(req);
+	}
+
 }
